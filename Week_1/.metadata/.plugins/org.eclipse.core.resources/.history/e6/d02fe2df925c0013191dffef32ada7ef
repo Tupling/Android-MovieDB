@@ -19,7 +19,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.daletupling.movies.MainActivity;
@@ -85,14 +84,8 @@ public class Data {
 			}//catch closing bracket
 			
 			return response_string;
-		}//doInbackGround closing bracket
-		
-		@Override
-		protected void onPostExecute(String result){
-			Log.i("RESPONSE", result);
-			
 		}
 		
-	}//getData closing bracket
+	}
 
-}//Data class closing bracket
+}

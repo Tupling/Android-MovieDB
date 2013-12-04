@@ -14,18 +14,13 @@ package libs;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.daletupling.movies.MainActivity;
-
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 public class Data {
@@ -67,32 +62,5 @@ public class Data {
 		}
 		return data_string;
 	}//getResponse closing bracket
-	
-	
-	//Get API data drill down data to get desired movie information
-	public static class getData extends AsyncTask<String, Void, String>{
 
-		@Override
-		protected String doInBackground(String... params) {
-			String response_string = "";
-			try{
-				URL url = new URL(MainActivity.finalURL);
-				Log.i("URL", url.toString());
-				response_string = getResponse(url);
-			} catch (MalformedURLException URLExc){
-				response_string ="Malformed URL";
-				Log.e(TAG, "ERROR:", URLExc);
-			}//catch closing bracket
-			
-			return response_string;
-		}//doInbackGround closing bracket
-		
-		@Override
-		protected void onPostExecute(String result){
-			Log.i("RESPONSE", result);
-			
-		}
-		
-	}//getData closing bracket
-
-}//Data class closing bracket
+}
