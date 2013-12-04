@@ -10,8 +10,6 @@
  */
 package com.daletupling.movies;
 
-import com.daletupling.libs.WebData;
-
 import libs.Data;
 import libs.Data.getData;
 import android.os.Bundle;
@@ -89,9 +87,6 @@ public class MainActivity extends Activity {
 				
 			}//onClick closing bracket
 		});//onClickListener closing bracket
-        
-        //Run network status method from WebData class in Network jar file
-        connected = WebData.getStatus(mContext);
     }//onCreate closing bracket
 
 

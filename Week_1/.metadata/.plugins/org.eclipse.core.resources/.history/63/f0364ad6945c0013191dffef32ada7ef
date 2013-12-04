@@ -93,8 +93,6 @@ public class Data {
 			
 		}
 		
-
-		
 	}//getData closing bracket
 
 }//Data class closing bracket
