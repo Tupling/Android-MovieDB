@@ -1,8 +1,20 @@
+/*
+ * Project:        MoviesDB
+ * 
+ * Package: com.daletupling.movies
+ * 
+ * Author:         Dale Tupling
+ * 
+ * Date:        December 2nd, 2013
+ * 
+ */
 package com.daletupling.movies;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+
+
 
 public class MainActivity extends Activity {
 
