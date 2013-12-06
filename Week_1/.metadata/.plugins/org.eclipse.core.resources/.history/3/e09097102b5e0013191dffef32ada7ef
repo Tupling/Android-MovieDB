@@ -15,6 +15,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -84,9 +85,16 @@ public class MovieContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
 			String sortOrder) {
 		// TODO Auto-generated method stub
-		
+		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
 		
 	
+		switch(uriMatcher.match(uri)){
+		case MOVIES:
+			return MovieData.CONTENT_TYPE;
+			
+		case MOVIES_ID:
+			return MovieData.CONTENT_ITEM_TYPE;
+		}
 		
 		return null;
 	}

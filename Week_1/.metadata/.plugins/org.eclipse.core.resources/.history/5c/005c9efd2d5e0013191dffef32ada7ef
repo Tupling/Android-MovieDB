@@ -62,6 +62,7 @@ public class MovieService extends IntentService {
 				dataResponse = Data.getResponse(finalURL);
 				//Check for empty response
 				if(dataResponse.length() > 0) result = Activity.RESULT_OK;
+				Storage.storeObjectFile(mContext, "movies", , false)
 			}catch(MalformedURLException e){
 				Log.e("URL ERROR", "URL MALFORMED");
 				//set finalURL if URL is malformed

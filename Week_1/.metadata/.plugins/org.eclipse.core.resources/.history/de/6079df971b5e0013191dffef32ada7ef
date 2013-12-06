@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <service android:name="libs.MovieService"></service>
-        <provider android:name="libs.MovieContentProvider" android:authorities="com.daletupling.movies.libs.MovieContenProvider" android:exported="true"></provider>
     </application>
 
 </manifest>

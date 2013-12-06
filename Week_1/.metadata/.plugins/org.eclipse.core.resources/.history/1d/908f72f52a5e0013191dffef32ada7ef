@@ -84,11 +84,12 @@ public class MainActivity extends Activity {
 				//Clear adapter to prepare for new data
 				listAdapter.clear();
 				
-				String tempString = search.getText().toString();
+				search_string = search.getText().toString();
 				//Check for empty search string display error dialog if it is empty.
-				search_string = tempString.replaceAll(" ", "%20");
 				if(search_string != null){
 	
+					//Replace spaces within search string with %20
+					search_string.replaceAll(" ", "%20");
 					//Pass search string to movieSearch method
 					movieSearch(search_string);
 					

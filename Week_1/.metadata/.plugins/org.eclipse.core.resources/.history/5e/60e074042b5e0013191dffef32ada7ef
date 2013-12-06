@@ -84,9 +84,16 @@ public class MovieContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
 			String sortOrder) {
 		// TODO Auto-generated method stub
+		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
 		
-		
-	
+		String JSONString = 
+		switch(uriMatcher.match(uri)){
+		case MOVIES:
+			return MovieData.CONTENT_TYPE;
+			
+		case MOVIES_ID:
+			return MovieData.CONTENT_ITEM_TYPE;
+		}
 		
 		return null;
 	}
