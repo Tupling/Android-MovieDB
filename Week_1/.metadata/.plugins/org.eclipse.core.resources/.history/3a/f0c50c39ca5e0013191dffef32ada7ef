@@ -10,9 +10,6 @@
  */
 package libs;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -42,7 +39,6 @@ public class MovieService extends IntentService {
 	String finalSearch = null;
 	URL finalURL = null;
 	int result;
-	public static String FILENAME = "APIData";
 	
 	JSONArray array_results;
 	
@@ -64,26 +60,11 @@ public class MovieService extends IntentService {
 				//run url through Data class
 				dataResponse = Data.getResponse(finalURL);
 				//Check for empty response
-				//Log.i("JSON DATA STRING:", dataResponse.toString());
-				
-				FileOutputStream fos = null;
-				try {
-					fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				fos.write(dataResponse.getBytes());
-				fos.close();
-				
 				if(dataResponse.length() > 0) result = Activity.RESULT_OK;
 			}catch(MalformedURLException e){
 				Log.e("URL ERROR", "URL MALFORMED");
 				//set finalURL if URL is malformed
 				finalURL = null;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			//Send data through messenger
 			Messenger messenger = (Messenger) extras.get("messenger");

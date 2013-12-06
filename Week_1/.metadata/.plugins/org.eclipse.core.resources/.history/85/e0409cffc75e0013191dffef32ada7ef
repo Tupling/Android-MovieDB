@@ -179,7 +179,7 @@ public class MainActivity extends Activity {
 											R.id.release_text });
 							movie_list.setAdapter(listA);
 						}
-						//Log.i("JSON DATA:", movieArray.toString());
+						Log.i("JSON DATA:", movieArray.toString());
 					}// if movieArray Null statement closing bracket
 				} catch (JSONException e) {
 					Log.e("DATA EXCEPTION", "JSON DATA EXCEPTION");

@@ -65,10 +65,9 @@ public class MovieService extends IntentService {
 				dataResponse = Data.getResponse(finalURL);
 				//Check for empty response
 				//Log.i("JSON DATA STRING:", dataResponse.toString());
-				
 				FileOutputStream fos = null;
 				try {
-					fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+					fos = openFileOutput("JsonData", Context.MODE_PRIVATE);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

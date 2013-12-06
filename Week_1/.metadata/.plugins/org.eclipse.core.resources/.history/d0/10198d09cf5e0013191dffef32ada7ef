@@ -23,15 +23,15 @@ public class MovieContentProvider extends ContentProvider {
 	public static final String CONTENT_AUTHORITY = "com.daletupling.movies.libs.MovieContenProvider";
 	
 	public static class MovieData implements BaseColumns{
-		public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY +"/items");
+		public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY +"/movies");
 		
-		public static final String CONTENT_TYPE= "vnd.android.cursor.dir/vnd.daletupling.movies.item";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.movies/vnd.daletupling.movies.item";
+		public static final String CONTENT_TYPE= "vnd.android.cursor.dir/vnd.daletupling.movies.movies";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.movies/vnd.daletupling.movies.movies";
 		
-		public static final String TITLE = "original_title";
+		public static final String TITLE = "title";
 		public static final String DATE = "release_date";
 
-		public static String[] PROJECTION = {"_Id", TITLE, DATE};
+		public static String[] PROJECTION = {"Id", TITLE, DATE};
 		
 	private MovieData (){};
 	
@@ -44,8 +44,8 @@ public class MovieContentProvider extends ContentProvider {
 	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
 	static {
-		uriMatcher.addURI(CONTENT_AUTHORITY, "items/", MOVIES);
-		uriMatcher.addURI(CONTENT_AUTHORITY, "items/#", MOVIES_ID);
+		uriMatcher.addURI(CONTENT_AUTHORITY, "movies/", MOVIES);
+		uriMatcher.addURI(CONTENT_AUTHORITY, "movies/#", MOVIES_ID);
 	}
 	
 	@Override
