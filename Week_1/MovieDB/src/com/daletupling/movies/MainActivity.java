@@ -10,14 +10,27 @@
  */
 package com.daletupling.movies;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.daletupling.libs.WebData;
 
-import libs.Data;
-import libs.Data.getData;
+
+import libs.MovieService;
+//import libs.Data.getData;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.view.Menu;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.util.Log;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,7 +38,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 
-
+//Handler Leak suppress for movieHandler
+@SuppressLint("HandlerLeak")
 public class MainActivity extends Activity {
 	public static Context mContext;
 	//Layout elements
@@ -39,12 +53,7 @@ public class MainActivity extends Activity {
 	
 	//Search string variables
 	String search_string;
-	public static String finalSearch;
-	
-	//API Url Variables
-	public static String initialURL = "";
-	public static String finalURL;
-	
+
 	//ListAdapter
 	public static ArrayAdapter<String>listAdapter;
 
@@ -58,7 +67,7 @@ public class MainActivity extends Activity {
         search = (EditText) findViewById(R.id.search_input);
         movie_list = (ListView) findViewById(R.id.movie_list);
         //ListView Adapter Instantiate
-        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Data.movies);
+        //listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Data.movies);
         //set ListView Adapter
         movie_list.setAdapter(listAdapter);
        
@@ -73,33 +82,80 @@ public class MainActivity extends Activity {
 				//Clear adapter to prepare for new data
 				listAdapter.clear();
 				
-				//Get search string from EditText and set as search_string
 				search_string = search.getText().toString();
-				
+				//Check for empty search string display error dialog if it is empty.
 				if(search_string != null){
-					//replace search_string spaces, and set as finalSearch
-					finalSearch = search_string.replaceAll(" ",  "%20");
-					//Call getData method from Data class
-					getData data = new getData();
-					finalURL = (initialURL+finalSearch);
-					//execute getData using finalURL
-					data.execute(finalURL);
+	
+					//Replace spaces within search string with %20
+					search_string.replaceAll(" ", "%20");
+					//Pass search string to movieSearch method
+					movieSearch(search_string);
+					
 					
 				}//if statement closing bracket
-				
+
 			}//onClick closing bracket
+			
 		});//onClickListener closing bracket
         
+        
+        
         //Run network status method from WebData class in Network jar file
+        // Check Network Status
         connected = WebData.getStatus(mContext);
+        if (connected) {
+                Log.i("NETWORK", WebData.getType(mContext));
+
+        } else {
+                // Display dialog box for no connection
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(
+                                "No Internet Connection Detected. Check your connection and try again.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                                new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog,
+                                                                        int id) {
+                                                                dialog.cancel();
+                                                        }
+                                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+        }// network connection if statement closing bracket
     }//onCreate closing bracket
 
+    private Handler movieHandler = new Handler(){
+    	public void handleMessage(Message message){
+    		Object dataObj = message.obj;
+    		if(message.arg1 == RESULT_OK && dataObj != null){
+    			String movieResults = (String) message.obj.toString();
+    	
+    			try{
+    				JSONObject jsonObject = new JSONObject(movieResults);
+    				JSONArray movieArray = jsonObject.getJSONArray("results");
+    				if(movieArray != null){
+    					Log.i("JSON DATA:", movieArray.toString());
+    				}//if movieArray Null statement closing bracket
+    			}catch(JSONException e){
+    				Log.e("DATA EXCEPTION", "JSON DATA EXCEPTION");
+    				
+    			}//catch closing bracket	
+    			}//message check statement closing bracket
+    		}//handlerMessage closing bracket
+    	};//Handler closing bracket
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
     
+    
+    //Movie search method
+    private void movieSearch(String search_string){
+
+		Log.i("SEARCH:", search_string);
+		
+		Messenger messenger = new Messenger(movieHandler);
+		Intent intent = new Intent(mContext, MovieService.class);
+		intent.putExtra("search_string", search_string);
+		intent.putExtra("messenger", messenger);
+		startService(intent);
+    }//movieSearch Closing bracket
 }
