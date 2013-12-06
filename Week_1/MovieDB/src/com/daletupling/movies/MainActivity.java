@@ -10,6 +10,11 @@
  */
 package com.daletupling.movies;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +22,6 @@ import org.json.JSONObject;
 import com.daletupling.libs.WebData;
 
 
-import libs.Data;
 import libs.MovieService;
 //import libs.Data.getData;
 import android.os.Bundle;
@@ -33,10 +37,11 @@ import android.content.Intent;
 import android.util.Log;
 
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 
 //Handler Leak suppress for movieHandler
@@ -49,6 +54,8 @@ public class MainActivity extends Activity {
 	Button filter_button;
 	ListView movie_list;
 	
+	SimpleAdapter listA;
+
 	//Connection boolean declare
 	Boolean connected = false;
 	
@@ -56,8 +63,8 @@ public class MainActivity extends Activity {
 	//Search string variables
 	String search_string;
 
-	//ListAdapter
-	public static ArrayAdapter<String>listAdapter;
+	
+	List<Map<String, String>> movieListMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +75,7 @@ public class MainActivity extends Activity {
         //instantiate EditText, ListView
         search = (EditText) findViewById(R.id.search_input);
         movie_list = (ListView) findViewById(R.id.movie_list);
-        //ListView Adapter Instantiate
-        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Data.movies);
-        //set ListView Adapter
-        movie_list.setAdapter(listAdapter);
+
        
         
         //Instantiate button
@@ -79,10 +83,10 @@ public class MainActivity extends Activity {
         //Set button onClick functionality
         search_button.setOnClickListener(new View.OnClickListener() {
 			
+
 			@Override
 			public void onClick(View v) {
-				//Clear adapter to prepare for new data
-				listAdapter.clear();
+	
 				
 				String tempString = search.getText().toString();
 				//Check for empty search string display error dialog if it is empty.
@@ -91,8 +95,13 @@ public class MainActivity extends Activity {
 	
 					//Pass search string to movieSearch method
 					movieSearch(search_string);
-					
-					
+					//close keyboard when Search is clicked
+					 InputMethodManager imm = (InputMethodManager)getSystemService(
+                             Context.INPUT_METHOD_SERVICE);
+                       imm.hideSoftInputFromWindow(((View) v).getWindowToken(), 0);
+                       
+                       search.setText("");
+                       search.setHint("Filter movies or new search...");
 				}//if statement closing bracket
 
 			}//onClick closing bracket
@@ -153,6 +162,29 @@ public class MainActivity extends Activity {
     				JSONObject jsonObject = new JSONObject(movieResults);
     				JSONArray movieArray = jsonObject.getJSONArray("results");
     				if(movieArray != null){
+    					
+    					movieListMap = new ArrayList<Map<String, String>>();
+    					for(int i = 0; i < movieArray.length(); i++){
+    						JSONObject movieArrayObj = movieArray.getJSONObject(i);
+    						Log.i("Movie Titles:", movieArrayObj.getString("original_title"));
+    						Log.i("Movie Release:", movieArrayObj.getString("release_date"));
+    						
+    						Map<String, String> map = new HashMap<String, String>(2);
+    						
+    						map.put("title", movieArrayObj.getString("original_title"));
+    						map.put("release", movieArrayObj.getString("release_date"));
+    						
+    						
+    						movieListMap.add(map);
+    						
+    						
+    					    // List adapter is set
+    				        listA = new SimpleAdapter(mContext, movieListMap, R.layout.list_layout,
+    				                new String[] {"title","release"},
+    				                new int[] {R.id.title_text,
+    				                           R.id.release_text});
+    				        movie_list.setAdapter(listA);
+    					}
     					Log.i("JSON DATA:", movieArray.toString());
     				}//if movieArray Null statement closing bracket
     			}catch(JSONException e){
