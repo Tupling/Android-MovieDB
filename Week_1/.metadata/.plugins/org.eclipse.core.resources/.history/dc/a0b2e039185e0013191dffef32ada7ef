@@ -6,6 +6,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="search_movies">Search movies</string>
     <string name="search_btn_text">Search</string>
-    <string name="filter_btn_text">Filter</string>
 
 </resources>

@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.daletupling.libs.WebData;
 
 
-import libs.Data;
 import libs.MovieService;
 //import libs.Data.getData;
 import android.os.Bundle;
@@ -46,7 +45,6 @@ public class MainActivity extends Activity {
 	//Layout elements
 	EditText search;
 	Button search_button;
-	Button filter_button;
 	ListView movie_list;
 	
 	//Connection boolean declare
@@ -69,7 +67,7 @@ public class MainActivity extends Activity {
         search = (EditText) findViewById(R.id.search_input);
         movie_list = (ListView) findViewById(R.id.movie_list);
         //ListView Adapter Instantiate
-        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Data.movies);
+        //listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Data.movies);
         //set ListView Adapter
         movie_list.setAdapter(listAdapter);
        
@@ -99,21 +97,6 @@ public class MainActivity extends Activity {
 			}//onClick closing bracket
 			
 		});//onClickListener closing bracket
-       
-        
-        //Filter button
-        filter_button = (Button) findViewById(R.id.filter_button);
-        //disable filter button
-        filter_button.setEnabled(false);
-        filter_button.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-		});//filter button on clickListener closing bracket
-        
         
         
         
@@ -147,8 +130,6 @@ public class MainActivity extends Activity {
     		Object dataObj = message.obj;
     		if(message.arg1 == RESULT_OK && dataObj != null){
     			String movieResults = (String) message.obj.toString();
-    			//set enable once data has been found from previous search or new search
-    			filter_button.setEnabled(true);
     	
     			try{
     				JSONObject jsonObject = new JSONObject(movieResults);

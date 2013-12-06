@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.daletupling.libs.WebData;
 
 
-import libs.Data;
 import libs.MovieService;
 //import libs.Data.getData;
 import android.os.Bundle;

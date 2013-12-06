@@ -17,20 +17,12 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-
-
-
 import android.content.Context;
 import android.util.Log;
 
 public class Data {
 	
 	static Context context;
-	
-	public static ArrayList<String> movies = new ArrayList<String>();
-	public static ArrayList<String> genre = new ArrayList<String>();
-	
 	
 	//tag string
 	static String TAG = "SERVICES - APIDATA";
