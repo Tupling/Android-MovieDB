@@ -1,0 +1,30 @@
+package libs;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import android.content.Context;
+
+public class Storage {
+
+	
+	public static Boolean storeFile(Context context, String filname, Object content, boolean external){
+		FileOutputStream fos = null;
+		try {
+			fos = openFileOutput(MovieService.FILENAME, Context.MODE_PRIVATE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		fos.write(MovieService.dataResponse.getBytes());
+		fos.close();
+		
+		
+		
+		
+		return external;
+		
+	}
+
+	}
+}

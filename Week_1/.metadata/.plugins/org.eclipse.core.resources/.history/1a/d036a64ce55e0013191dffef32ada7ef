@@ -1,0 +1,152 @@
+/*
+ * Project:        MoviesDB
+ * 
+ * Package: com.daletupling.movies
+ * 
+ * Author:         Dale Tupling
+ * 
+ * Date:        December 5th, 2013
+ * 
+ */
+
+package libs;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.net.Uri;
+import android.provider.BaseColumns;
+import android.util.Log;
+
+public class MovieContentProvider extends ContentProvider {
+Context mContext;
+	
+	public static final String CONTENT_AUTHORITY = "com.daletupling.movies.libs.MovieContenProvider";
+	
+	public static String MOVIEFILE = MovieService.FILENAME;
+	public static class MovieData implements BaseColumns{
+		public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY +"/items");
+		
+		public static final String CONTENT_TYPE= "vnd.android.cursor.dir/vnd.daletupling.movies.item";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.movies/vnd.daletupling.movies.item";
+		
+		public static final String TITLE = "original_title";
+		public static final String DATE = "release_date";
+
+		public static String[] PROJECTION = {"_Id", TITLE, DATE};
+		
+	private MovieData (){};
+	
+	}
+	
+	public static final int MOVIES = 1;
+	public static final int MOVIES_ID = 2;
+	
+	
+	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+	
+	static {
+		uriMatcher.addURI(CONTENT_AUTHORITY, "items/", MOVIES);
+		uriMatcher.addURI(CONTENT_AUTHORITY, "items/#", MOVIES_ID);
+	}
+	
+	@Override
+	public int delete(Uri arg0, String arg1, String[] arg2) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getType(Uri uri) {
+		// TODO Auto-generated method stub
+		switch(uriMatcher.match(uri)){
+		case MOVIES:
+			return MovieData.CONTENT_TYPE;
+			
+		case MOVIES_ID:
+			return MovieData.CONTENT_ITEM_TYPE;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Uri insert(Uri arg0, ContentValues arg1) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean onCreate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+			String sortOrder) {
+
+		// TODO Auto-generated method stub
+		String fileData = "";
+		
+		FileInputStream fis = null;
+		try{
+			fis = mContext.openFileInput(MovieService.FILENAME);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			byte[] contentBytes = new byte[1024];
+			int bytesRead = 0;
+			StringBuffer contentBuffer = new StringBuffer();
+			while((bytesRead = bis.read(contentBytes)) != -1){
+				fileData = new String(contentBytes, 0, bytesRead);
+				fileData = contentBuffer.toString();
+			}
+		}catch (Exception e){
+		
+		}finally{
+			try{
+			fis.close();
+		}catch (IOException e){
+			Log.e("FILE CLOSE ERROR", e.toString());
+		}
+		}
+	
+		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
+		
+		String dataString = fileData;
+		Log.i("JSON FILE:", fileData.toString());
+		JSONObject jsonObject = null;
+		JSONArray movieArray = null;
+		
+		try{
+			jsonObject = new JSONObject(dataString);
+		}catch (JSONException e){
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+
+		
+
+
+
+
+	@Override
+	public int update(Uri arg0, ContentValues arg1, String arg2, String[] arg3) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+}

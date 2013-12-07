@@ -21,7 +21,10 @@ import org.json.JSONObject;
 
 import com.daletupling.libs.WebData;
 
+import libs.MovieContentProvider;
 import libs.MovieService;
+
+import android.net.Uri;
 //import libs.Data.getData;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +36,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.util.Log;
 
 import android.view.View;
@@ -142,12 +146,40 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message message) {
 			Object dataObj = message.obj;
 			if (message.arg1 == RESULT_OK && dataObj != null) {
-				String movieResults = (String) message.obj.toString();
+				//String movieResults = (String) message.obj.toString();
 				// set enable once data has been found from previous search or
 				// new search
 				filter_button.setEnabled(true);
+				Uri startURI = Uri.parse(MovieContentProvider.MovieData.CONTENT_URI.toString());
+				Cursor cursor = getContentResolver().query(startURI, null, null, null, null);
+				if(cursor == null){
+					Log.e("Cursor Null:", startURI.toString());
+				}else{
+					if(movieListMap != null){
+						movieListMap.clear();
+					}
+					if(cursor.moveToFirst() == true){
+						for(int i = 0 ; i < cursor.getCount(); i++){
+							Map<String, String> map = new HashMap<String, String>(
+									2);
 
-				try {
+							map.put("title",
+									cursor.getString(1));
+							map.put("release",
+									cursor.getString(2));
+
+							movieListMap.add(map);
+						}
+						
+						listA = new SimpleAdapter(mContext, movieListMap,
+								R.layout.list_layout, new String[] {
+										"title", "release" },
+								new int[] { R.id.title_text,
+										R.id.release_text });
+						movie_list.setAdapter(listA);
+					}
+				}
+				/*try {
 					JSONObject jsonObject = new JSONObject(movieResults);
 					JSONArray movieArray = jsonObject.getJSONArray("results");
 					if (movieArray != null) {
@@ -184,7 +216,10 @@ public class MainActivity extends Activity {
 				} catch (JSONException e) {
 					Log.e("DATA EXCEPTION", "JSON DATA EXCEPTION");
 
-				}// catch closing bracket
+				}// catch closing bracket*/
+				
+				
+				
 			}// message check statement closing bracket
 		}// handlerMessage closing bracket
 	};// Handler closing bracket
@@ -200,4 +235,36 @@ public class MainActivity extends Activity {
 		intent.putExtra("messenger", messenger);
 		startService(intent);
 	}// movieSearch Closing bracket
+	
+	/*public void displayMovies(Uri uri){
+		Log.i("URI", uri.toString());
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+		if(cursor == null){
+			Log.e("Cursor Null:", uri.toString());
+		}else{
+			if(movieListMap != null){
+				movieListMap.clear();
+			}
+			if(cursor.moveToFirst() == true){
+				for(int i = 0 ; i < cursor.getCount(); i++){
+					Map<String, String> map = new HashMap<String, String>(
+							2);
+
+					map.put("title",
+							cursor.getString(1));
+					map.put("release",
+							cursor.getString(2));
+
+					movieListMap.add(map);
+				}
+				
+				listA = new SimpleAdapter(mContext, movieListMap,
+						R.layout.list_layout, new String[] {
+								"title", "release" },
+						new int[] { R.id.title_text,
+								R.id.release_text });
+				movie_list.setAdapter(listA);
+			}
+		}
+	}*/
 }
