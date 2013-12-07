@@ -232,7 +232,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 	  super.onSaveInstanceState(outState);
-	      outState.putParcelable(MY_LIST, movie_list.onSaveInstanceState());
+	      outState.putParcelable(LIST_INSTANCE_STATE, movie_list.onSaveInstanceState());
 	}
 
 }

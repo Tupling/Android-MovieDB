@@ -24,19 +24,17 @@
         
        
     </LinearLayout>
-
-    <Button
-        android:id="@+id/filter_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/filter_btn_text" />
-
-    <Button
-        android:id="@+id/refresh_previous"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/refresh_btn_text" />
-
+            <Button 
+            android:id="@+id/filter_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_btn_text"/>
+            
+            <Button 
+            android:id="@+id/refresh_previous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh Previous"/>
         <ListView
        android:id="@+id/movie_list"
         android:layout_width="wrap_content"

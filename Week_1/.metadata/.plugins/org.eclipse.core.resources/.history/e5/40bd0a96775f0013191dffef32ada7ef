@@ -46,7 +46,6 @@ import android.widget.SimpleAdapter;
 @SuppressLint("HandlerLeak")
 public class MainActivity extends Activity {
 	public static Context mContext;
-	public static String MY_LIST;
 	// Layout elements
 	EditText search;
 	Button search_button;
@@ -95,7 +94,7 @@ public class MainActivity extends Activity {
 					imm.hideSoftInputFromWindow(((View) v).getWindowToken(), 0);
 
 					search.setText("");
-					search.setHint(R.string.filter_hint);
+					search.setHint(R.string.search_hint);
 				}// if statement closing bracket
 
 			}// onClick closing bracket
@@ -133,8 +132,6 @@ public class MainActivity extends Activity {
 					displayMovies(previousSearch);
 					refresh_button.setVisibility(View.GONE);
 					filter_button.setVisibility(View.VISIBLE);
-					search.setText("");
-					search.setHint(R.string.filter_hint);
 			}
 		});//refresh button closing bracket
 		
@@ -228,11 +225,6 @@ public class MainActivity extends Activity {
 			}
 		}
 		cursor.close();
-	}
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-	  super.onSaveInstanceState(outState);
-	      outState.putParcelable(MY_LIST, movie_list.onSaveInstanceState());
 	}
 
 }

@@ -46,7 +46,6 @@ import android.widget.SimpleAdapter;
 @SuppressLint("HandlerLeak")
 public class MainActivity extends Activity {
 	public static Context mContext;
-	public static String MY_LIST;
 	// Layout elements
 	EditText search;
 	Button search_button;
@@ -95,7 +94,7 @@ public class MainActivity extends Activity {
 					imm.hideSoftInputFromWindow(((View) v).getWindowToken(), 0);
 
 					search.setText("");
-					search.setHint(R.string.filter_hint);
+					search.setHint("Filter movies or new search...");
 				}// if statement closing bracket
 
 			}// onClick closing bracket
@@ -127,14 +126,8 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Uri previousSearch = Uri
-						.parse(MovieContentProvider.MovieData.CONTENT_URI
-								.toString());
-					displayMovies(previousSearch);
-					refresh_button.setVisibility(View.GONE);
-					filter_button.setVisibility(View.VISIBLE);
-					search.setText("");
-					search.setHint(R.string.filter_hint);
+				// TODO Auto-generated method stub
+				
 			}
 		});//refresh button closing bracket
 		
@@ -228,11 +221,6 @@ public class MainActivity extends Activity {
 			}
 		}
 		cursor.close();
-	}
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-	  super.onSaveInstanceState(outState);
-	      outState.putParcelable(MY_LIST, movie_list.onSaveInstanceState());
 	}
 
 }

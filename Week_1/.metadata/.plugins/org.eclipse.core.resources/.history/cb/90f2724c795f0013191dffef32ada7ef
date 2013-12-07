@@ -46,7 +46,6 @@ import android.widget.SimpleAdapter;
 @SuppressLint("HandlerLeak")
 public class MainActivity extends Activity {
 	public static Context mContext;
-	public static String MY_LIST;
 	// Layout elements
 	EditText search;
 	Button search_button;
@@ -232,7 +231,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 	  super.onSaveInstanceState(outState);
-	      outState.putParcelable(MY_LIST, movie_list.onSaveInstanceState());
+	      outState.putParcelable(LIST_INSTANCE_STATE, movie_list.onSaveInstanceState());
 	}
 
 }
