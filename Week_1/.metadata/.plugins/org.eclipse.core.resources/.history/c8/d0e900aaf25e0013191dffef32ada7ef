@@ -236,4 +236,35 @@ public class MainActivity extends Activity {
 		startService(intent);
 	}// movieSearch Closing bracket
 	
+	/*public void displayMovies(Uri uri){
+		Log.i("URI", uri.toString());
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+		if(cursor == null){
+			Log.e("Cursor Null:", uri.toString());
+		}else{
+			if(movieListMap != null){
+				movieListMap.clear();
+			}
+			if(cursor.moveToFirst() == true){
+				for(int i = 0 ; i < cursor.getCount(); i++){
+					Map<String, String> map = new HashMap<String, String>(
+							2);
+
+					map.put("title",
+							cursor.getString(1));
+					map.put("release",
+							cursor.getString(2));
+
+					movieListMap.add(map);
+				}
+				
+				listA = new SimpleAdapter(mContext, movieListMap,
+						R.layout.list_layout, new String[] {
+								"title", "release" },
+						new int[] { R.id.title_text,
+								R.id.release_text });
+				movie_list.setAdapter(listA);
+			}
+		}
+	}*/
 }
