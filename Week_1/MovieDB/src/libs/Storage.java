@@ -11,7 +11,6 @@ import android.util.Log;
 
 public class Storage {
 
-
 	public static String readFile(Context context, String filename) {
 
 		String content = "";
@@ -38,15 +37,16 @@ public class Storage {
 		}
 		return content;
 	}
-	
-	public static Boolean storeStringFile(Context context, String filename, String content, Boolean external){
-		try{
+
+	public static Boolean storeStringFile(Context context, String filename,
+			String content, Boolean external) {
+		try {
 			FileOutputStream fos;
-				fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+			fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
 			fos.write(content.getBytes());
-			Log.i("FILE SAVED", filename+" SAVED");
+			Log.i("FILE SAVED", filename + " SAVED");
 			fos.close();
-		} catch (IOException e){
+		} catch (IOException e) {
 			Log.e("WRITE ERROR", filename);
 		}
 		return true;

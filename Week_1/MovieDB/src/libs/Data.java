@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 
 
+
 import android.content.Context;
 import android.util.Log;
 
@@ -59,6 +60,8 @@ public class Data {
 			Log.e(TAG, "IOEXCEPTION");
 			IOExc.printStackTrace();
 		}
+	
+			
 		return data_string;
 	}//getResponse closing bracket
 	

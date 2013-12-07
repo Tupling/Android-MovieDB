@@ -14,8 +14,6 @@ package libs;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.JSONArray;
-
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
@@ -41,9 +39,7 @@ public class MovieService extends IntentService {
         URL finalURL = null;
         int result;
         public static String FILENAME = "APIData";
-        
-        JSONArray array_results;
-        
+
 
         @Override
         protected void onHandleIntent(Intent intent) {
@@ -63,7 +59,7 @@ public class MovieService extends IntentService {
                                 dataResponse = Data.getResponse(finalURL);
                                 //Check for empty response
                                 //Log.i("JSON DATA STRING:", dataResponse.toString());
-                                
+                               
                                 //Store APIData
                                 Storage.storeStringFile(this, FILENAME, dataResponse, false);
                                 
@@ -73,6 +69,7 @@ public class MovieService extends IntentService {
                                 //set finalURL if URL is MALFORMED
                                 finalURL = null;
                         } 
+                    	
                         //Send data through messenger
                         Messenger messenger = (Messenger) extras.get("messenger");
                         Message message = Message.obtain();
