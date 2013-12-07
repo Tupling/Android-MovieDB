@@ -10,7 +10,6 @@
         android:id="@+id/title_text"
         android:layout_width="300dip"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dip"
         android:gravity="left" />
 
     <TextView

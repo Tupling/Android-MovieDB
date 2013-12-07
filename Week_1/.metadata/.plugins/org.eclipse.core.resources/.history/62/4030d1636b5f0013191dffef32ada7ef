@@ -133,7 +133,7 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("original_title"));
 					Log.i("Movie Release:",
 							movieArrayObj.getString("release_date"));
-					
+
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
 							movieArrayObj.get("release_date") });
@@ -181,9 +181,6 @@ public class MovieContentProvider extends ContentProvider {
 					e.printStackTrace();
 				}
 			}
-			break;
-			default:
-				Log.e("query", "INVALID URI = " +uri.toString());
 
 		}
 

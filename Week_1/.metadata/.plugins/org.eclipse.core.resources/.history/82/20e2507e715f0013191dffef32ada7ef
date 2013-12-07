@@ -111,7 +111,6 @@ public class MainActivity extends Activity {
 				Uri yearUri = Uri
 						.parse(MovieContentProvider.MovieData.CONTENT_URI
 								.toString()+"/year/"+search.getText().toString());
-				Log.i("YEAR URI", yearUri.toString());
 					displayMovies(yearUri);
 
 			}

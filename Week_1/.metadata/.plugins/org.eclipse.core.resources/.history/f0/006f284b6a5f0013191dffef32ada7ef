@@ -108,11 +108,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Uri yearUri = Uri
-						.parse(MovieContentProvider.MovieData.CONTENT_URI
-								.toString()+"/year/"+search.getText().toString());
-				Log.i("YEAR URI", yearUri.toString());
-					displayMovies(yearUri);
+				// TODO Auto-generated method stub
 
 			}
 		});// filter button on clickListener closing bracket
@@ -187,15 +183,11 @@ public class MainActivity extends Activity {
 							2);
 
 					map.put("title", cursor.getString(1));
-					if(cursor.getString(2).equals("")){
-						map.put("release", "No Date");
-					}else{
-					
-					map.put("release", cursor.getString(2).substring(0,4));
-					}
-				
-					movieListMap.add(map);
+					map.put("release", cursor.getString(2));
+
 					cursor.moveToNext();
+
+					movieListMap.add(map);
 				}
 
 				listA = new SimpleAdapter(mContext, movieListMap,
@@ -205,7 +197,6 @@ public class MainActivity extends Activity {
 				movie_list.setAdapter(listA);
 			}
 		}
-		cursor.close();
 	}
 
 }

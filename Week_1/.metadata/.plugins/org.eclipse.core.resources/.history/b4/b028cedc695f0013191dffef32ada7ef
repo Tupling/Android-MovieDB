@@ -108,11 +108,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Uri yearUri = Uri
-						.parse(MovieContentProvider.MovieData.CONTENT_URI
-								.toString()+"/year/"+search.getText().toString());
-				Log.i("YEAR URI", yearUri.toString());
-					displayMovies(yearUri);
+				// TODO Auto-generated method stub
 
 			}
 		});// filter button on clickListener closing bracket
@@ -154,7 +150,36 @@ public class MainActivity extends Activity {
 				Uri startURI = Uri
 						.parse(MovieContentProvider.MovieData.CONTENT_URI
 								.toString());
-					displayMovies(startURI);
+				Cursor cursor = getContentResolver().query(startURI, null,
+						null, null, null);
+				if (cursor == null) {
+					Log.e("Cursor Null:", startURI.toString());
+				} else {
+					if (movieListMap != null) {
+						movieListMap.clear();
+					}
+					if (cursor.moveToFirst() == true) {
+						movieListMap = new ArrayList<Map<String, String>>();
+						for (int i = 0; i < cursor.getCount(); i++) {
+							Map<String, String> map = new HashMap<String, String>(
+									2);
+
+							map.put("title", cursor.getString(1));
+							map.put("release", cursor.getString(2));
+
+							cursor.moveToNext();
+
+							movieListMap.add(map);
+						}
+
+						listA = new SimpleAdapter(mContext, movieListMap,
+								R.layout.list_layout, new String[] { "title",
+										"release" }, new int[] {
+										R.id.title_text, R.id.release_text });
+						movie_list.setAdapter(listA);
+					}
+				}
+
 			}// message check statement closing bracket
 		}// handlerMessage closing bracket
 	};// Handler closing bracket
@@ -171,7 +196,7 @@ public class MainActivity extends Activity {
 		startService(intent);
 	}// movieSearch Closing bracket
 	
-	public void displayMovies(Uri uri){
+	public void displayMovie(Uri uri){
 		Cursor cursor = getContentResolver().query(uri, null,
 				null, null, null);
 		if (cursor == null) {
@@ -187,15 +212,11 @@ public class MainActivity extends Activity {
 							2);
 
 					map.put("title", cursor.getString(1));
-					if(cursor.getString(2).equals("")){
-						map.put("release", "No Date");
-					}else{
-					
-					map.put("release", cursor.getString(2).substring(0,4));
-					}
-				
-					movieListMap.add(map);
+					map.put("release", cursor.getString(2));
+
 					cursor.moveToNext();
+
+					movieListMap.add(map);
 				}
 
 				listA = new SimpleAdapter(mContext, movieListMap,
@@ -205,7 +226,6 @@ public class MainActivity extends Activity {
 				movie_list.setAdapter(listA);
 			}
 		}
-		cursor.close();
 	}
 
 }

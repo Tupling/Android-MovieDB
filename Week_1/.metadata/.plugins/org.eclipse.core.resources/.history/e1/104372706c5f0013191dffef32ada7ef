@@ -133,10 +133,10 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("original_title"));
 					Log.i("Movie Release:",
 							movieArrayObj.getString("release_date"));
-					
+					String yearOnly = movieArrayObj.getString("release_date").substring(0,4);
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
-							movieArrayObj.get("release_date") });
+							movieArrayObj.get(yearOnly) });
 				} catch (JSONException e) {
 
 					e.printStackTrace();

@@ -51,7 +51,7 @@ public class MovieContentProvider extends ContentProvider {
 
 	public static final int ITEMS = 1;
 	public static final int ITEMS_ID = 2;
-	public static final int ITEMS_RELEASE_FILTER = 3;
+	public static final int ITEMS_YEAR_FILTER = 3;
 
 	private static final UriMatcher uriMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
@@ -59,8 +59,7 @@ public class MovieContentProvider extends ContentProvider {
 	static {
 		uriMatcher.addURI(CONTENT_AUTHORITY, "items/", ITEMS);
 		uriMatcher.addURI(CONTENT_AUTHORITY, "items/#", ITEMS_ID);
-		uriMatcher.addURI(CONTENT_AUTHORITY, "items/year/*",
-				ITEMS_RELEASE_FILTER);
+		uriMatcher.addURI(CONTENT_AUTHORITY, "items/year/*", ITEMS_YEAR_FILTER);
 	}
 
 	@Override
@@ -102,9 +101,10 @@ public class MovieContentProvider extends ContentProvider {
 		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
 
 		String JSONData = Storage.readFile(getContext(), MOVIEFILE);
+		
 
 		Log.i("JSON FILE:", JSONData);
-
+		
 		JSONObject jsonObject = null;
 		JSONArray movieArray = null;
 		if (JSONData != null) {
@@ -115,7 +115,7 @@ public class MovieContentProvider extends ContentProvider {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		} else {
+		} else{
 			Log.i("FILEDATA", "FILEDATA IS NULL!");
 		}
 		if (movieArray == null) {
@@ -133,7 +133,7 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("original_title"));
 					Log.i("Movie Release:",
 							movieArrayObj.getString("release_date"));
-					
+
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
 							movieArrayObj.get("release_date") });
@@ -145,46 +145,38 @@ public class MovieContentProvider extends ContentProvider {
 			break;
 		case ITEMS_ID:
 			String itemID = uri.getLastPathSegment();
-			int index;
-			try {
-				index = Integer.parseInt(itemID);
-			} catch (NumberFormatException e) {
-				break;
-			}
-			if (index <= 0 || index > movieArray.length()) {
-				break;
-			}
-			try {
-				JSONObject movieArrayObj = movieArray.getJSONObject(index - 1);
-				result.addRow(new Object[] { index + 1,
-						movieArrayObj.get("original_title"),
-						movieArrayObj.get("release_date") });
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
+			 int index;
+			 try{
+				 index = Integer.parseInt(itemID);				 
+			 }catch(NumberFormatException e){
+				 break;
+			 }
+			 if (index <= 0 || index > movieArray.length()){
+				 break;
+			 }
+			 try{
+				JSONObject movieArrayObj = movieArray.getJSONObject(index-1);
+				result.addRow(new Object [] {index +1, movieArrayObj.get("original_title"), movieArrayObj.get("release_date")});
+			 }catch (JSONException e){
+				 e.printStackTrace();
+			 }
+			
 			break;
 		case ITEMS_RELEASE_FILTER:
 
-			String yearFilter = uri.getLastPathSegment();
-			for (int i = 0; i < movieArray.length(); i++) {
-				try {
-					JSONObject movieArrayObj = movieArray.getJSONObject(i);
-					if (movieArrayObj.getString("release_date").contentEquals(
-							yearFilter)) {
-						result.addRow(new Object[] { i + 1,
-								movieArrayObj.get("original_title"),
-								movieArrayObj.get("release_date") });
-						Log.e("RESULT:", result.toString());
+				String yearFilter = uri.getLastPathSegment();
+				for (int i = 0; i< movieArray.length(); i++){
+					try{
+						JSONObject movieArrayObj = movieArray.getJSONObject(i);
+						if(movieArrayObj.getString("release_date").contentEquals(yearFilter)){
+							result.addRow(new Object [] {i +1, movieArrayObj.get("original_title"), movieArrayObj.get("release_date")});
+							Log.e("RESULT:", result.toString());
+						}
+					}catch (JSONException e){
+						e.printStackTrace();
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
 				}
-			}
-			break;
-			default:
-				Log.e("query", "INVALID URI = " +uri.toString());
-
+				
 		}
 
 		return result;

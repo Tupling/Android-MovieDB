@@ -59,7 +59,7 @@ public class MovieContentProvider extends ContentProvider {
 	static {
 		uriMatcher.addURI(CONTENT_AUTHORITY, "items/", ITEMS);
 		uriMatcher.addURI(CONTENT_AUTHORITY, "items/#", ITEMS_ID);
-		uriMatcher.addURI(CONTENT_AUTHORITY, "items/year/*",
+		uriMatcher.addURI(CONTENT_AUTHORITY, "year/*",
 				ITEMS_RELEASE_FILTER);
 	}
 
@@ -133,7 +133,7 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("original_title"));
 					Log.i("Movie Release:",
 							movieArrayObj.getString("release_date"));
-					
+
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
 							movieArrayObj.get("release_date") });
