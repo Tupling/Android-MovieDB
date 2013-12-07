@@ -11,10 +11,6 @@
 
 package libs;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +33,8 @@ public class MovieContentProvider extends ContentProvider {
 	public static String MOVIEFILE = MovieService.FILENAME;
 
 	public static class MovieData implements BaseColumns {
-	public static final Uri CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY+"/items");
+		public static final Uri CONTENT_URI = Uri.parse("content://"
+				+ CONTENT_AUTHORITY + "/items");
 
 		public static final String CONTENT_TYPE = "cnd.android.cursor.dir/vnd.daletupling.movies.item";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.daletupling.movies.item";
@@ -99,38 +96,25 @@ public class MovieContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 
-		// TODO Auto-generated method stub
-		String fileData = "";
-
-		FileInputStream fis = null;
-		try {
-			fis = mContext.openFileInput(MovieService.FILENAME);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			byte[] contentBytes = new byte[1024];
-			int bytesRead = 0;
-			StringBuffer contentBuffer = new StringBuffer();
-			while ((bytesRead = bis.read(contentBytes)) != -1) {
-				fileData = new String(contentBytes, 0, bytesRead);
-				fileData = contentBuffer.toString();
-			}
-			Log.i("FILE LOADED", "FILE HAS LOADED");
-		} catch (Exception e) {
-
-		}
-
 		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
 
-		String dataString = fileData;
-		Log.i("JSON FILE:", fileData.toString());
+		String JSONData = Storage.readFile(getContext(), MOVIEFILE);
+		
+
+		Log.i("JSON FILE:", JSONData);
+		
 		JSONObject jsonObject = null;
 		JSONArray movieArray = null;
+		if (JSONData != null) {
+			try {
+				jsonObject = new JSONObject(JSONData);
+				movieArray = jsonObject.getJSONArray("results");
 
-		try {
-			jsonObject = new JSONObject(dataString);
-			movieArray = jsonObject.getJSONArray("results");
-
-		} catch (JSONException e) {
-			e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else{
+			Log.i("FILEDATA", "FILEDATA IS NULL!");
 		}
 		if (movieArray == null) {
 
@@ -142,11 +126,12 @@ public class MovieContentProvider extends ContentProvider {
 		case ITEMS:
 			for (int i = 0; i < movieArray.length(); i++) {
 				try {
-				JSONObject movieArrayObj = movieArray.getJSONObject(i);
-				Log.i("Movie Titles:",
-						movieArrayObj.getString("original_title"));
-				Log.i("Movie Release:", movieArrayObj.getString("release_date"));
-				
+					JSONObject movieArrayObj = movieArray.getJSONObject(i);
+					Log.i("Movie Titles:",
+							movieArrayObj.getString("original_title"));
+					Log.i("Movie Release:",
+							movieArrayObj.getString("release_date"));
+
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
 							movieArrayObj.get("release_date") });
@@ -155,9 +140,23 @@ public class MovieContentProvider extends ContentProvider {
 					e.printStackTrace();
 				}
 			}
-
+			break;
+			
 		case ITEMS_ID:
 
+				String yearFilter = uri.getLastPathSegment();
+				for (int i = 0; i< movieArray.length(); i++){
+					try{
+						JSONObject movieArrayObj = movieArray.getJSONObject(i);
+						if(movieArrayObj.getString("release_date").contentEquals(yearFilter)){
+							result.addRow(new Object [] {i +1, movieArrayObj.get("original_title"), movieArrayObj.get("release_date")});
+							Log.e("RESULT:", result.toString());
+						}
+					}catch (JSONException e){
+						e.printStackTrace();
+					}
+				}
+				
 		}
 
 		return result;

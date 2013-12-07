@@ -2,9 +2,9 @@ package libs;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import android.content.Context;
 
 import android.util.Log;
@@ -12,51 +12,44 @@ import android.util.Log;
 public class Storage {
 
 
-	public Boolean writeFile(Context context, String filename, String content){
-		
-		Boolean result = false;
-		
-		
-		FileOutputStream fos = null;;
-		
-		try{
-			fos = context.openFileOutput(MovieService.FILENAME, Context.MODE_PRIVATE);
-			fos.write(content.getBytes());
-			fos.close();
-			Log.i("FILEWRITE:", "FILE SAVED");
-		}catch (Exception e){
-			Log.e("FILEWRITE ERROR", e.toString());
-		}
-		return result;
-		
-	}
-	
+	public static String readFile(Context context, String filename) {
 
-	
-	public String readFile(Context context, String filename){
-		
-		String fileData = "";
-		
-		FileInputStream fis = null;
-		try{
-			fis = context.openFileInput(MovieService.FILENAME);
-			BufferedInputStream bis = new BufferedInputStream(fis);
+		String content = "";
+		try {
+
+			FileInputStream fin;
+			fin = context.openFileInput(filename);
+
+			BufferedInputStream bin = new BufferedInputStream(fin);
 			byte[] contentBytes = new byte[1024];
 			int bytesRead = 0;
 			StringBuffer contentBuffer = new StringBuffer();
-			while((bytesRead = bis.read(contentBytes)) != -1){
-				fileData = new String(contentBytes, 0, bytesRead);
-				fileData = contentBuffer.toString();
+
+			while ((bytesRead = bin.read(contentBytes)) != -1) {
+				content = new String(contentBytes, 0, bytesRead);
+				contentBuffer.append(content);
 			}
-		}catch (Exception e){
-		
-		}finally{
-			try{
-			fis.close();
-		}catch (IOException e){
-			Log.e("FILE CLOSE ERROR", e.toString());
+			content = contentBuffer.toString();
+			fin.close();
+		} catch (FileNotFoundException e) {
+			Log.e("READ ERROR", "FILE NOT FOUND " + filename);
+		} catch (IOException e) {
+			Log.e("READ ERROR", "I/O ERROR");
 		}
-		}
-		return fileData;
+		return content;
 	}
+	
+	public static Boolean storeStringFile(Context context, String filename, String content, Boolean external){
+		try{
+			FileOutputStream fos;
+				fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+			fos.write(content.getBytes());
+			Log.i("FILE SAVED", filename+" SAVED");
+			fos.close();
+		} catch (IOException e){
+			Log.e("WRITE ERROR", filename);
+		}
+		return true;
+	}
+
 }

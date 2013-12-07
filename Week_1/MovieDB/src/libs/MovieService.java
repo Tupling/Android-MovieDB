@@ -10,9 +10,7 @@
  */
 package libs;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -66,28 +64,15 @@ public class MovieService extends IntentService {
                                 //Check for empty response
                                 //Log.i("JSON DATA STRING:", dataResponse.toString());
                                 
-                               FileOutputStream fos = null;
-                                try {
-                                        fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-                                        fos.write(dataResponse.getBytes());
-                                        fos.close();
-                                        Log.i("DATA PULLED", dataResponse.toString());
-                                    	Log.i("FILEWRITE:", "FILE SAVED");
-                                } catch (FileNotFoundException e) {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
-                                }
-
+                                //Store APIData
+                                Storage.storeStringFile(this, FILENAME, dataResponse, false);
                                 
                                 if(dataResponse.length() > 0) result = Activity.RESULT_OK;
                         }catch(MalformedURLException e){
                                 Log.e("URL ERROR", "URL MALFORMED");
-                                //set finalURL if URL is malformed
+                                //set finalURL if URL is MALFORMED
                                 finalURL = null;
-                        } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                        }
+                        } 
                         //Send data through messenger
                         Messenger messenger = (Messenger) extras.get("messenger");
                         Message message = Message.obtain();

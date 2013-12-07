@@ -15,10 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.daletupling.libs.WebData;
 
 import libs.MovieContentProvider;
@@ -150,6 +146,7 @@ public class MainActivity extends Activity {
 				// set enable once data has been found from previous search or
 				// new search
 				filter_button.setEnabled(true);
+				
 				Uri startURI = Uri.parse(MovieContentProvider.MovieData.CONTENT_URI.toString());
 				Cursor cursor = getContentResolver().query(startURI, null, null, null, null);
 				if(cursor == null){
@@ -159,6 +156,7 @@ public class MainActivity extends Activity {
 						movieListMap.clear();
 					}
 					if(cursor.moveToFirst() == true){
+						movieListMap = new ArrayList<Map<String, String>>();
 						for(int i = 0 ; i < cursor.getCount(); i++){
 							Map<String, String> map = new HashMap<String, String>(
 									2);
@@ -167,6 +165,8 @@ public class MainActivity extends Activity {
 									cursor.getString(1));
 							map.put("release",
 									cursor.getString(2));
+							
+							cursor.moveToNext();
 
 							movieListMap.add(map);
 						}
