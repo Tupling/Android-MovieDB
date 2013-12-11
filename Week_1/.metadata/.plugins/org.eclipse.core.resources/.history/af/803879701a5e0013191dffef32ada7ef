@@ -1,5 +1,0 @@
-package libs;
-
-public class MovieContentProvider extends ContentProvider {
-
-}
