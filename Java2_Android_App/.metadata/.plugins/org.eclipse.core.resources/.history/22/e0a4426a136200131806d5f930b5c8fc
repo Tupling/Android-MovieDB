@@ -20,7 +20,7 @@ public class MovieDetailsActivity extends Activity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.details_layout);
+		setContentView(R.layout.linear_layout);
 	}//onCreate closing bracket
 
 }

@@ -10,6 +10,6 @@
     <string name="refresh_btn_text">Refresh Previous</string>
     <string name="filter_hint">Filter movies or New search...</string>
     <string name="search_hint">Search for movies...</string>
-    <string name="details_string">Details</string>
+    <string name="details_activity">Details</string>
 
 </resources>

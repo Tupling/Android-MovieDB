@@ -26,8 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity android:name=".MovieDetailsActivity"
-                    android:label="@string/details_string"></activity>
         <service android:name="libs.MovieService"></service>
         <provider android:name="libs.MovieContentProvider" android:authorities="com.daletupling.movies.provider" android:exported="true"></provider>
     </application>
