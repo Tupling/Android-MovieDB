@@ -234,12 +234,17 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				Intent i = new Intent(getApplicationContext(), MovieDetailsActivity.class);
-				String movieTitle = parent.getItemAtPosition(position).toString();
-				String movieRelease = parent.getItemAtPosition(position).toString();
+				HashMap<String, String> passedMap = (HashMap<String, String>) movie_list.getItemAtPosition(position);
 				
-				i.putExtra("selectedMovie", movieTitle);
-				i.putExtra("selectedRelease", movieRelease);
+				Intent i = new Intent(getApplicationContext(), MovieDetailsActivity.class);
+				
+				
+				
+				i.putExtra("selectedMovie", passedMap.get("title"));
+				i.putExtra("selectedRelease", passedMap.get("release"));
+				i.putExtra("posterPath", passedMap.get("poster"));
+				i.putExtra("voteCount", passedMap.get("votes"));
+				i.putExtra("voteAvg", passedMap.get("vote_avg"));
 				startActivity(i);
 				
 			}
@@ -345,6 +350,9 @@ public class MainActivity extends Activity {
 					Map<String, String> map = new HashMap<String, String>(2);
 
 					map.put("title", cursor.getString(1));
+					map.put("poster", cursor.getString(3));
+					map.put("votes", cursor.getString(4));
+					map.put("vote_avg", cursor.getString(5));
 					if (cursor.getString(2).equals("")) {
 						map.put("release", "No Date");
 					} else {

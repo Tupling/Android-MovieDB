@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Extracts string &apos;Poster&apos; into R.string.poster" description="Extracts string &apos;Poster&apos; into R.string.poster" file="/MovieDB/res/layout/details_layout.xml" flags="6" id="com.android.ide.eclipse.adt.refactoring.extract.string" mode="EDIT_SOURCE" proj="/MovieDB" rplc-all-java="false" rplc-all-xml="false" sel-end="369" sel-start="335" stamp="1386818427493" tok-esc="Poster" xml-attr-name="android:contentDescription"/>
+</session>

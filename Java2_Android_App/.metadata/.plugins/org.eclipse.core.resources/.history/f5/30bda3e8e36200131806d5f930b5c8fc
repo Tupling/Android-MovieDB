@@ -1,0 +1,131 @@
+/*
+ * Project:        MoviesDB
+ * 
+ * Package: com.daletupling.movies
+ * 
+ * Author:         Dale Tupling
+ * 
+ * Date:        December 10th, 2013
+ * 
+ */
+
+package com.daletupling.movies;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class MovieDetailsActivity extends Activity {
+
+
+	Context mContext;
+	TextView movie_title;
+	TextView movie_release;
+	TextView vote_title;
+	TextView vote_avg_title;
+	ImageView poster;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.details_layout);
+
+		movie_title = (TextView) findViewById(R.id.movie_title);
+		movie_release = (TextView) findViewById(R.id.movie_release);
+		vote_title = (TextView) findViewById(R.id.vote_count_title);
+		vote_avg_title = (TextView) findViewById(R.id.vote_avg_title);
+
+		poster = (ImageView) findViewById(R.id.poster);
+
+		Intent i = getIntent();
+		String movieTitle = i.getStringExtra("selectedMovie");
+		String movieRelease = i.getStringExtra("selectedRelease");
+		String posterPath = i.getStringExtra("posterPath");
+
+		Log.i("POSTER", posterPath);
+
+		movie_title.setText(movieTitle);
+		movie_release.setText(movieRelease);
+		setTitle(movieTitle);
+
+
+		String baseURL = "https://d3gtl9l2a4fn1j.cloudfront.net/t/p/w90"+posterPath;
+
+		//Creating subclass object
+		GetImage getPoster = new GetImage();
+		//Call to execute GetImage with baseURL String
+		getPoster.execute(new String[]{baseURL});
+	}
+		
+		public class GetImage extends AsyncTask<String, Void, Bitmap>{
+
+			@Override
+			protected Bitmap doInBackground(String... urls) {
+				// TODO Auto-generated method stub
+				Bitmap bmp = null;
+				for (String url : urls){
+					bmp = downloadPoster(url);
+				}
+				return bmp;
+			}
+			
+			@Override
+			protected void onPostExecute(Bitmap result){
+				poster.setImageBitmap(result);
+			}
+			
+			private Bitmap downloadPoster(String url){
+				Bitmap bm = null;
+				InputStream is = null;
+				BitmapFactory.Options bm_o = new BitmapFactory.Options();
+				bm_o.inSampleSize = 1;
+				
+				try{
+					is = getHttpConnection(url);
+					bm = BitmapFactory.decodeStream(is, null, bm_o);
+					is.close();
+					
+				}catch (IOException io_e){
+					io_e.printStackTrace();
+				}
+				return bm;
+			}
+			private InputStream getHttpConnection(String urlString) throws IOException{
+				InputStream is = null;
+				URL url = new URL(urlString);
+				URLConnection connection = url.openConnection();
+				
+				try{
+					HttpURLConnection httpC = (HttpURLConnection) connection;
+					httpC.setRequestMethod("GET");
+					httpC.connect();
+					
+					if(httpC.getResponseCode() == HttpURLConnection.HTTP_OK){
+						is = httpC.getInputStream();
+					}
+				}catch(Exception exception){
+					exception.printStackTrace();
+				}
+				return is;
+			}
+		}//AsyncTask closing bracket
+		
+		
+		
+
+	}// onCreate closing bracket
+
+}

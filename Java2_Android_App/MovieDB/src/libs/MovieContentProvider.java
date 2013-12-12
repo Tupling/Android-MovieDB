@@ -43,8 +43,11 @@ public class MovieContentProvider extends ContentProvider {
 
 		public static final String TITLE = "original_title";
 		public static final String DATE = "release_date";
+		public static final String POSTER = "poster_path";
+		public static final String VOTECOUNT = "vote_count";
+		public static final String VOTEAVG = "vote_average";
 
-		public static String[] PROJECTION = { "_Id", TITLE, DATE };
+		public static String[] PROJECTION = { "_Id", TITLE, DATE, POSTER, VOTECOUNT, VOTEAVG };
 
 		private MovieData() {
 		};
@@ -136,10 +139,15 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("original_title"));
 					Log.i("Movie Release:",
 							movieArrayObj.getString("release_date"));
+					Log.i("Movie Poster:",
+							movieArrayObj.getString("poster_path"));
 					
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
-							movieArrayObj.get("release_date") });
+							movieArrayObj.get("release_date"), 
+							movieArrayObj.get("poster_path"),
+							movieArrayObj.get("vote_count"),
+							movieArrayObj.get("vote_average")});
 				} catch (JSONException e) {
 
 					e.printStackTrace();
@@ -164,7 +172,10 @@ public class MovieContentProvider extends ContentProvider {
 				//add new row to result
 				result.addRow(new Object[] { index + 1,
 						movieArrayObj.get("original_title"),
-						movieArrayObj.get("release_date") });
+						movieArrayObj.get("release_date"), 
+						movieArrayObj.get("poster_path"),
+						movieArrayObj.get("vote_count"),
+						movieArrayObj.get("vote_average")});
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}//catch closing bracket
@@ -183,7 +194,10 @@ public class MovieContentProvider extends ContentProvider {
 						//add new row to result
 						result.addRow(new Object[] { i + 1,
 								movieArrayObj.get("original_title"),
-								movieArrayObj.get("release_date") });
+								movieArrayObj.get("release_date"),
+								movieArrayObj.get("poster_path"),
+								movieArrayObj.get("vote_count"),
+								movieArrayObj.get("vote_average")});
 						Log.e("RESULT:", result.toString());
 					}
 				} catch (JSONException e) {
