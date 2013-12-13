@@ -14,5 +14,7 @@
     <string name="poster">Movie Poster</string>
     <string name="vote_avg_title">Vote Average:</string>
     <string name="vote_title">Votes:</string>
+    <string name="previous">Previously Viewed:</string>
+    <string name="search_google">Search Google</string>
 
 </resources>

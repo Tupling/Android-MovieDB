@@ -52,6 +52,12 @@
             android:gravity="center"
             android:textColor="#FF0000"
             android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_google" />
     </LinearLayout>
 
 </ScrollView>

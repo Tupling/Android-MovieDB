@@ -11,6 +11,7 @@
 
 package com.daletupling.movies;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -18,17 +19,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressLint("NewApi")
 public class MovieDetailsActivity extends Activity {
 
 	Context mContext;
@@ -37,19 +44,25 @@ public class MovieDetailsActivity extends Activity {
 	ImageView poster;
 	TextView vote_count;
 	TextView vote_avg;
+	Bitmap bmp;
 
+	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.details_layout);
-
+		//Setup Action Bar
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		
+		//Layout elements
 		movie_title = (TextView) findViewById(R.id.movie_title);
 		movie_release = (TextView) findViewById(R.id.movie_release);
-
 		vote_count = (TextView) findViewById(R.id.vote_count);
 		vote_avg = (TextView) findViewById(R.id.vote_avg);
-
 		poster = (ImageView) findViewById(R.id.poster);
 
+		//String declarations for passed items
 		Intent i = getIntent();
 		String movieTitle = i.getStringExtra("selectedMovie");
 		String movieRelease = i.getStringExtra("selectedRelease");
@@ -59,6 +72,7 @@ public class MovieDetailsActivity extends Activity {
 
 		Log.i("POSTER", posterPath);
 
+		//Set layout elements
 		movie_title.setText(movieTitle);
 		movie_release.setText(movieRelease);
 		setTitle(movieTitle);
@@ -86,7 +100,7 @@ public class MovieDetailsActivity extends Activity {
 		//Call downloadPost method in background
 		protected Bitmap doInBackground(String... urls) {
 			// TODO Auto-generated method stub
-			Bitmap bmp = null;
+			bmp = null;
 			for (String url : urls) {
 
 				bmp = downloadPoster(url);
@@ -137,6 +151,18 @@ public class MovieDetailsActivity extends Activity {
 			return is;
 		}
 	}// AsyncTask closing bracket
+	
+	public boolean onOptionsItemSelected(MenuItem item){
+		Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
+		Drawable draw = poster.getDrawable();
+		Bitmap bitmap = Bitmap.createBitmap(draw.getIntrinsicWidth(), draw.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+		backIntent.putExtra("byteArray", baos.toByteArray());
+		setResult(RESULT_OK, backIntent);
+		finish();
+		return true;
+	}
 
 }// MovieDetailsClass closing bracket
 

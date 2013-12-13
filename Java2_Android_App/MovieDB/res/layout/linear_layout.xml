@@ -39,6 +39,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/refresh_btn_text" />
+    
+     <TextView
+            android:id="@+id/previous_viewed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="18sp" 
+            android:text="@string/previous"/>
+     
+             <ImageView
+            android:id="@+id/previous_poster"
+            android:layout_width="100dip"
+            android:layout_height="150dip"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dip"
+            android:contentDescription="@string/poster" />
 
         <ListView
        android:id="@+id/movie_list"
