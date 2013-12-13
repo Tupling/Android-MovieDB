@@ -75,7 +75,7 @@ public class MovieDetailsActivity extends Activity {
 		String voteAvg = i.getStringExtra("voteAvg");
 
 		Log.i("POSTER", posterPath);
-		Log.i("MOVIETITLE", movieTitle);
+		Log.i("MOVIETITLE", movie_title.getText().toString());
 
 		//Set layout elements
 		movie_title.setText(movieTitle);
@@ -88,15 +88,8 @@ public class MovieDetailsActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-			String tempGoogleString = movie_title.getText().toString();
-			
-			if(tempGoogleString != ""){
-				String googleSearch = tempGoogleString.replaceAll(" ", "%20");
-				Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q="+googleSearch));
-				startActivity(implicitIntent);
-			}
-
-				
+				// TODO Auto-generated method stub
+				Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q="));
 				
 			}
 			

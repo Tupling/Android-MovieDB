@@ -47,8 +47,7 @@ public class MovieContentProvider extends ContentProvider {
 		public static final String VOTECOUNT = "vote_count";
 		public static final String VOTEAVG = "vote_average";
 
-		public static String[] PROJECTION = { "_Id", TITLE, DATE, POSTER,
-				VOTECOUNT, VOTEAVG };
+		public static String[] PROJECTION = { "_Id", TITLE, DATE, POSTER, VOTECOUNT, VOTEAVG };
 
 		private MovieData() {
 		};
@@ -118,6 +117,7 @@ public class MovieContentProvider extends ContentProvider {
 				jsonObject = new JSONObject(JSONData);
 				movieArray = jsonObject.getJSONArray("results");
 
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -141,22 +141,21 @@ public class MovieContentProvider extends ContentProvider {
 							movieArrayObj.getString("release_date"));
 					Log.i("Movie Poster:",
 							movieArrayObj.getString("poster_path"));
-
+					
 					result.addRow(new Object[] { i + 1,
 							movieArrayObj.get("original_title"),
-							movieArrayObj.get("release_date"),
+							movieArrayObj.get("release_date"), 
 							movieArrayObj.get("poster_path"),
 							movieArrayObj.get("vote_count"),
-							movieArrayObj.get("vote_average") });
+							movieArrayObj.get("vote_average")});
 				} catch (JSONException e) {
 
 					e.printStackTrace();
-				}// catch closing bracket
-			}// for loop closing bracket
+				}//catch closing bracket
+			}//for loop closing bracket
 			break;
-		// Not actually using a filter for ITEMS_ID added this via instructions
-		// from video
-		// so i could get an idea of how ID filter works.
+			//Not actually using a filter for ITEMS_ID added this via instructions from video
+			//so i could get an idea of how ID filter works.
 		case ITEMS_ID:
 			String itemID = uri.getLastPathSegment();
 			int index;
@@ -164,42 +163,41 @@ public class MovieContentProvider extends ContentProvider {
 				index = Integer.parseInt(itemID);
 			} catch (NumberFormatException e) {
 				break;
-			}// catch closing bracket
+			}//catch closing bracket
 			if (index <= 0 || index > movieArray.length()) {
 				break;
-			}// if statement closing bracket
+			}//if statement closing bracket
 			try {
 				JSONObject movieArrayObj = movieArray.getJSONObject(index - 1);
-				// add new row to result
+				//add new row to result
 				result.addRow(new Object[] { index + 1,
 						movieArrayObj.get("original_title"),
-						movieArrayObj.get("release_date"),
+						movieArrayObj.get("release_date"), 
 						movieArrayObj.get("poster_path"),
 						movieArrayObj.get("vote_count"),
-						movieArrayObj.get("vote_average") });
+						movieArrayObj.get("vote_average")});
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}// catch closing bracket
+			}//catch closing bracket
 
 			break;
 		case ITEMS_RELEASE_FILTER:
-			// get the last Segment of uri and place it into string
+			//get the last Segment of uri and place it into string
 			String yearFilter = uri.getLastPathSegment();
-			// loop through movieArray
+			//loop through movieArray
 			for (int i = 0; i < movieArray.length(); i++) {
 				try {
 					JSONObject movieArrayObj = movieArray.getJSONObject(i);
-					// check for yearFilter string contents to be contained in
-					// JSON "release_date"
+					//check for yearFilter string contents to be contained in JSON "release_date"
 					if (movieArrayObj.getString("release_date").contains(
 							yearFilter)) {
-						// add new row to result
+						//add new row to result
 						result.addRow(new Object[] { i + 1,
 								movieArrayObj.get("original_title"),
 								movieArrayObj.get("release_date"),
 								movieArrayObj.get("poster_path"),
 								movieArrayObj.get("vote_count"),
-								movieArrayObj.get("vote_average") });
+								movieArrayObj.get("vote_average")});
 						Log.e("RESULT:", result.toString());
 					}
 				} catch (JSONException e) {
@@ -207,22 +205,22 @@ public class MovieContentProvider extends ContentProvider {
 				}
 			}
 			break;
-		default:
-			// display invalid URI
-			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setMessage(
-					"The search you attempted was invalid and return 0 responses.")
-					.setCancelable(false)
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-			AlertDialog alert = builder.create();
-			alert.show();
-			Log.e("query", "INVALID URI = " + uri.toString());
+			default:
+				//display invalid URI
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage(
+                                "The search you attempted was invalid and return 0 responses.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                                new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog,
+                                                                        int id) {
+                                                                dialog.cancel();
+                                                        }
+                                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+				Log.e("query", "INVALID URI = " +uri.toString());
 
 		}
 

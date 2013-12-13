@@ -2,27 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" 
+    android:background="@drawable/background">
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <EditText
+        android:orientation="horizontal"
+        >
+        
+        <EditText 
             android:id="@+id/search_input"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:hint="@string/search_movies"
-            android:textColor="#FFF" />
-
-        <Button
+            android:textColor="#FFF"/>
+        
+        <Button 
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_btn_text" />
+            android:text="@string/search_btn_text"/>
+        
+       
     </LinearLayout>
 
     <Button
@@ -36,31 +39,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/refresh_btn_text" />
+    
+     <TextView
+            android:id="@+id/previous_viewed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="18sp" 
+            android:text="@string/previous"/>
+     
+     <TextView
+            android:id="@+id/previous_movie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/previous_viewed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:gravity="center"
-        android:text="@string/previous"
-        android:textColor="#FF0000"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/previous_movie"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:layout_marginBottom="10dip"
-        android:gravity="center"
-        android:textColor="#FFF"
-        android:textSize="16sp" />
-
-    <ListView
-        android:id="@+id/movie_list"
+        <ListView
+       android:id="@+id/movie_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
+ 
     </ListView>
-
 </LinearLayout>

@@ -93,7 +93,6 @@ public class MovieDetailsActivity extends Activity {
 			if(tempGoogleString != ""){
 				String googleSearch = tempGoogleString.replaceAll(" ", "%20");
 				Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q="+googleSearch));
-				startActivity(implicitIntent);
 			}
 
 				

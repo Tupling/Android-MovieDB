@@ -40,6 +40,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import android.view.View;
@@ -48,6 +50,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -63,7 +66,7 @@ public class MainActivity extends Activity {
 	Button refresh_button;
 	ListView movie_list;
 	TextView previous_text;
-	TextView previous_movie;
+	ImageView previous_poster;
 
 	SimpleAdapter listA;
 
@@ -87,8 +90,8 @@ public class MainActivity extends Activity {
 		previous_text = (TextView) findViewById(R.id.previous_viewed);
 		previous_text.setVisibility(View.GONE);
 		
-		previous_movie = (TextView) findViewById(R.id.previous_movie);
-		previous_movie.setVisibility(View.GONE);
+		previous_poster = (ImageView) findViewById(R.id.previous_poster);
+		previous_poster.setVisibility(View.GONE);
 		
 		
 		if(savedInstanceState != null){
@@ -406,12 +409,11 @@ public class MainActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent intent){
 		
 		if(resultCode == RESULT_OK && intent != null){
-		String previousMovie = intent.getExtras().getString("previous");
-			previous_movie.setVisibility(View.VISIBLE);
-			previous_text.setVisibility(View.VISIBLE);
-			previous_movie.setText(previousMovie);
+		Bitmap bmp = intent.getParcelableExtra("bitmap");
+			previous_poster.setImageBitmap(bmp);
 			}
 		
 		}
+	}
 
 }//MainActivity closing bracket

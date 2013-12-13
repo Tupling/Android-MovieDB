@@ -11,7 +11,7 @@
 
 package com.daletupling.movies;
 
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -26,7 +26,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,7 +76,6 @@ public class MovieDetailsActivity extends Activity {
 		String voteAvg = i.getStringExtra("voteAvg");
 
 		Log.i("POSTER", posterPath);
-		Log.i("MOVIETITLE", movieTitle);
 
 		//Set layout elements
 		movie_title.setText(movieTitle);
@@ -88,15 +88,7 @@ public class MovieDetailsActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-			String tempGoogleString = movie_title.getText().toString();
-			
-			if(tempGoogleString != ""){
-				String googleSearch = tempGoogleString.replaceAll(" ", "%20");
-				Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q="+googleSearch));
-				startActivity(implicitIntent);
-			}
-
-				
+				// TODO Auto-generated method stub
 				
 			}
 			
@@ -110,7 +102,7 @@ public class MovieDetailsActivity extends Activity {
 		// Call to execute GetImage with baseURL String
 		if(!posterPath.toString().equals("null")){
 		getPoster.execute(new String[] { baseURL });
-		poster.setImageBitmap(bmp);
+		image = getPoster.execute(new String[] {baseUrl});
 		}else{
 			poster.setImageResource(R.drawable.poster_unavailable);
 		}
@@ -176,12 +168,13 @@ public class MovieDetailsActivity extends Activity {
 		}
 	}// AsyncTask closing bracket
 	
-	//Pass back string to MainActivity
 	public boolean onOptionsItemSelected(MenuItem item){
 		Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
-		String previous = movie_title.getText().toString();
-		backIntent.putExtra("previous", previous);
-
+		Drawable draw = poster.getDrawable();
+		Bitmap bitmap = Bitmap.createBitmap(draw.getIntrinsicWidth(), draw.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+		backIntent.putExtra("byteArray", baos.toByteArray());
 		setResult(RESULT_OK, backIntent);
 		finish();
 		return true;
