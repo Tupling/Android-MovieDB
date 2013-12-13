@@ -10,6 +10,7 @@
  */
 package com.daletupling.movies;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -73,7 +75,6 @@ public class MainActivity extends Activity {
 	String search_string;
 
 	List<Map<String, String>> movieListMap;
-
 	
 
 	@SuppressWarnings("unchecked")
@@ -91,18 +92,27 @@ public class MainActivity extends Activity {
 		previous_movie.setVisibility(View.GONE);
 		
 		
-
+		if(savedInstanceState != null){
+		Log.d("INSTANCE", "SAVED INSTANCE");
+		//movieListMap = (ArrayList<Map<String, String>>) savedInstanceState.getSerializable("myList");
+		
 		
 		if(movieListMap != null){
 			listA = new SimpleAdapter(mContext, movieListMap,
 					R.layout.list_layout,
 					new String[] { "title", "release" }, new int[] {
 							R.id.title_text, R.id.release_text });
+			
 			//Set ListAdapter to previous created listA
 			//movie_list.setAdapter(listA);
+		}else{
+			Log.d("INSTANCE", "SAVED NULL VALUE");
 		}
 		
-		
+		}else{
+			Log.d("INSTANCE", "NO DATA");
+		}
+
 		// instantiate EditText, ListView
 		search = (EditText) findViewById(R.id.search_input);
 		movie_list = (ListView) findViewById(R.id.movie_list);
@@ -374,15 +384,29 @@ public class MainActivity extends Activity {
 				
 				//Set ListAdapter to previous created listA
 				movie_list.setAdapter(listA);
-				
 			}
 		}
 		cursor.close();
 	}//displayMovies method closing bracket
 	
 
-
-
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState){
+		super.onSaveInstanceState(savedInstanceState);
+		if(movieListMap != null && !movieListMap.isEmpty()){
+			movieListMap = (List<Map<String, String>>) savedInstanceState.getSerializable("myList");
+			Log.i("INSTANCE SAVING", "Saving Instance Data");
+		}
+	}//onSaveInstanceState closing bracket
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+	
+		Log.i("INSTANCE", "INSTANCE RESTORING");
+	}//onRestoreInstanceState closing bracket
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent intent){
 		

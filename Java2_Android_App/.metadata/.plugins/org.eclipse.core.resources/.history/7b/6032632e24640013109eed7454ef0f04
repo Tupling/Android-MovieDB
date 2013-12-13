@@ -10,6 +10,7 @@
  */
 package com.daletupling.movies;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -73,7 +75,7 @@ public class MainActivity extends Activity {
 	String search_string;
 
 	List<Map<String, String>> movieListMap;
-
+	private static final String LIST = "myList";
 	
 
 	@SuppressWarnings("unchecked")
