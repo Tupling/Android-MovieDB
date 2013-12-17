@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_frag);
+		setContentView(R.layout.linear_layout);
 		mContext = this;
 		movieListMap = new ArrayList<Map<String, String>>();
 
@@ -248,6 +248,7 @@ public class MainActivity extends Activity {
 
 		});// movie list on click listener closing bracket
 
+		// Run network status method from WebData class in Network jar file
 		// Check Network Status
 		checkConnection();
 
@@ -362,33 +363,32 @@ public class MainActivity extends Activity {
 		}
 
 	}
+	
+	public void checkConnection(){
+		// Run network status method from WebData class in Network jar file
+				// Check Network Status
+				connected = WebData.getStatus(mContext);
+				if (connected) {
+					Log.i("NETWORK", WebData.getType(mContext));
 
-	// Run network status method from WebData class in Network jar file
-	// Check Network Status
-	public void checkConnection() {
+				} else {
+					// Display dialog box for no connection
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setMessage(
+							"No Internet Connection Detected. Check your connection and try again.")
+							.setCancelable(false)
+							.setPositiveButton("OK",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog,
+												int id) {
+											dialog.cancel();
+										}
+									});
+					AlertDialog alert = builder.create();
+					alert.show();
+					search_button.setEnabled(false);
 
-		connected = WebData.getStatus(mContext);
-		if (connected) {
-			Log.i("NETWORK", WebData.getType(mContext));
-
-		} else {
-			// Display dialog box for no connection
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"No Internet Connection Detected. Check your connection and try again.")
-					.setCancelable(false)
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-			AlertDialog alert = builder.create();
-			alert.show();
-			search_button.setEnabled(false);
-
-		}// network connection if statement closing bracket
+				}// network connection if statement closing bracket
 	}
 
 }// MainActivity closing bracket

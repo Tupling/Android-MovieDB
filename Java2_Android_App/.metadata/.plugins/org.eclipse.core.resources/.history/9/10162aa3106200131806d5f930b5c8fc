@@ -1,5 +1,0 @@
-package com.daletupling.movies;
-
-public class MovieDetailsActivity extends Intent {
-
-}

@@ -11,6 +11,7 @@
 
 package com.daletupling.movies;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -52,11 +53,12 @@ public class MovieDetailsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.details_layout);
-		// Setup Action Bar
+		//Setup Action Bar
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
-		// Layout elements
+		
+		
+		//Layout elements
 		movie_title = (TextView) findViewById(R.id.movie_title);
 		movie_release = (TextView) findViewById(R.id.movie_release);
 		vote_count = (TextView) findViewById(R.id.vote_count);
@@ -64,7 +66,7 @@ public class MovieDetailsActivity extends Activity {
 		poster = (ImageView) findViewById(R.id.poster);
 		webView = (Button) findViewById(R.id.web_view);
 
-		// String declarations for passed items
+		//String declarations for passed items
 		Intent i = getIntent();
 		String movieTitle = i.getStringExtra("selectedMovie");
 		String movieRelease = i.getStringExtra("selectedRelease");
@@ -75,30 +77,29 @@ public class MovieDetailsActivity extends Activity {
 		Log.i("POSTER", posterPath);
 		Log.i("MOVIETITLE", movieTitle);
 
-		// Set layout elements
+		//Set layout elements
 		movie_title.setText(movieTitle);
 		movie_release.setText(movieRelease);
 		setTitle(movieTitle);
-		vote_count.setText("Votes: " + voteCount);
+		vote_count.setText("Votes: "+ voteCount);
 		vote_avg.setText("Vote Average: " + voteAvg);
-
+		
 		webView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				String tempGoogleString = movie_title.getText().toString();
-
-				if (tempGoogleString != "") {
-					String googleSearch = tempGoogleString.replaceAll(" ",
-							"%20");
-					Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri
-							.parse("https://www.google.com/search?q="
-									+ googleSearch));
-					startActivity(implicitIntent);
-				}
-
+			String tempGoogleString = movie_title.getText().toString();
+			
+			if(tempGoogleString != ""){
+				String googleSearch = tempGoogleString.replaceAll(" ", "%20");
+				Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q="+googleSearch));
+				startActivity(implicitIntent);
 			}
 
+				
+				
+			}
+			
 		});
 
 		String baseURL = "https://d3gtl9l2a4fn1j.cloudfront.net/t/p/w342"
@@ -107,20 +108,20 @@ public class MovieDetailsActivity extends Activity {
 		// Creating subclass object
 		GetImage getPoster = new GetImage();
 		// Call to execute GetImage with baseURL String
-		if (!posterPath.toString().equals("null")) {
-			getPoster.execute(new String[] { baseURL });
-			poster.setImageBitmap(bmp);
-		} else {
+		if(!posterPath.toString().equals("null")){
+		getPoster.execute(new String[] { baseURL });
+		poster.setImageBitmap(bmp);
+		}else{
 			poster.setImageResource(R.drawable.poster_unavailable);
 		}
 
 	}// onCreate closing bracket
 
-	// Class class method to get image from string url
+	//Class class method to get image from string url
 	public class GetImage extends AsyncTask<String, Void, Bitmap> {
 
 		@Override
-		// Call downloadPost method in background
+		//Call downloadPost method in background
 		protected Bitmap doInBackground(String... urls) {
 			// TODO Auto-generated method stub
 			bmp = null;
@@ -133,11 +134,10 @@ public class MovieDetailsActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			// sets imageView when comeplete AsyncTask
+			//sets imageView when comeplete AsyncTask
 			poster.setImageBitmap(result);
 		}
-
-		// Download image through inputstream by getting httpConnection
+		//Download image through inputstream by getting httpConnection
 		private Bitmap downloadPoster(String url) {
 			Bitmap bm = null;
 			InputStream is = null;
@@ -154,8 +154,7 @@ public class MovieDetailsActivity extends Activity {
 			}
 			return bm;
 		}
-
-		// Get httpConnection
+		//Get httpConnection
 		private InputStream getHttpConnection(String urlString)
 				throws IOException {
 			InputStream is = null;
@@ -176,11 +175,10 @@ public class MovieDetailsActivity extends Activity {
 			return is;
 		}
 	}// AsyncTask closing bracket
-
-	// Pass back string to MainActivity
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent backIntent = new Intent(getApplicationContext(),
-				MainActivity.class);
+	
+	//Pass back string to MainActivity
+	public boolean onOptionsItemSelected(MenuItem item){
+		Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
 		String previous = movie_title.getText().toString();
 		backIntent.putExtra("previous", previous);
 
