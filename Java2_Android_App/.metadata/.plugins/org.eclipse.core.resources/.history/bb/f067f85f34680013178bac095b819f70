@@ -20,7 +20,7 @@ public class MainFragment extends Fragment {
 	public interface MovieListener {
 		public void findMovies(String string);
 
-		public void movieSearch(String string);
+		public void movieSearch();
 
 		public void filterMovies();
 	}
@@ -71,15 +71,14 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				EditText search = (EditText) getActivity().findViewById(R.id.search_input);
 				//String search_string = search.getText().toString();
-				
+				m_listener.movieSearch();
 				Button refresh_button = (Button) getActivity().findViewById(R.id.refresh_previous);
-				//Button filter_button = (Button) getActivity().findViewById(R.id.filter_button);
+				Button filter_button = (Button) getActivity().findViewById(R.id.filter_button);
 				
 				refresh_button.setVisibility(View.GONE);
-				//filter_button.setVisibility(View.VISIBLE);
+				filter_button.setVisibility(View.VISIBLE);
 				search.setText("");
 				search.setHint(R.string.filter_hint);
-				m_listener.movieSearch(search.toString());
 			}
 		});// refresh button closing bracket
 		return view;

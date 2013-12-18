@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements
 	};// Handler closing bracket
 
 	public void displayMovies(Uri uri) {
-
+		closeKayboard();
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 		if (cursor == null) {
 			Log.e("Cursor Null:", uri.toString());

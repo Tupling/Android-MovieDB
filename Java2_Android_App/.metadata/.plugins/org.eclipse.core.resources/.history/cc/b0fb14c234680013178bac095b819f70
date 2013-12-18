@@ -162,8 +162,7 @@ public class MainActivity extends Activity implements
 					AlertDialog alert = builder.create();
 					alert.show();
 				} else {
-					Button filter_button = (Button) findViewById(R.id.filter_button);
-					filter_button.setVisibility(View.VISIBLE);
+					//filter_button.setVisibility(View.VISIBLE);
 
 					Uri startURI = Uri
 							.parse(MovieContentProvider.MovieData.CONTENT_URI
@@ -176,7 +175,6 @@ public class MainActivity extends Activity implements
 	};// Handler closing bracket
 
 	public void displayMovies(Uri uri) {
-
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 		if (cursor == null) {
 			Log.e("Cursor Null:", uri.toString());
@@ -229,7 +227,8 @@ public class MainActivity extends Activity implements
 			// Pass search string to movieSearch method
 			movieSearch(search_string);
 			// close keyboard when Search is clicked
-			closeKeyboard();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 
 			search.setText("");
 			search.setHint(R.string.filter_hint);
@@ -271,7 +270,6 @@ public class MainActivity extends Activity implements
 	//FILTER MOVIE MOVIELISTENER
 	@Override
 	public void filterMovies() {
-		closeKeyboard();
 		// TODO Auto-generated method stub
 		String filter_Valid = search.getText().toString();
 
@@ -316,13 +314,11 @@ public class MainActivity extends Activity implements
 			alert.show();
 
 		} else {
-			
 			Uri yearUri = Uri.parse(MovieContentProvider.MovieData.CONTENT_URI
 					.toString() + "/year/" + search.getText().toString());
 			Log.i("YEAR URI", yearUri.toString());
 			displayMovies(yearUri);
 			Button refresh_button = (Button) findViewById(R.id.refresh_previous);
-			Button filter_button = (Button) findViewById(R.id.filter_button);
 			refresh_button.setVisibility(View.VISIBLE);
 			filter_button.setVisibility(View.GONE);
 		}
@@ -371,10 +367,6 @@ public class MainActivity extends Activity implements
 
 
 
-	public void closeKeyboard(){
-		// close keyboard when Search is clicked
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-	}
+
 
 }// MainActivity closing bracket
