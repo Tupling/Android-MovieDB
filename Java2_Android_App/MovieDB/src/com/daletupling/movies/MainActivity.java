@@ -52,14 +52,15 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 //Handler Leak suppress for movieHandler
+
 @SuppressLint("HandlerLeak")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements
+		MainFragment.MovieListener {
+
 	public static Context mContext;
 	// Layout elements
 	EditText search;
-	Button search_button;
 	Button filter_button;
-	Button refresh_button;
 	ListView movie_list;
 	TextView previous_text;
 	TextView previous_movie;
@@ -99,132 +100,6 @@ public class MainActivity extends Activity {
 		// instantiate EditText, ListView
 		search = (EditText) findViewById(R.id.search_input);
 		movie_list = (ListView) findViewById(R.id.movie_list);
-
-		// Instantiate button
-		search_button = (Button) findViewById(R.id.search_button);
-		// Set button onClick functionality
-		search_button.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				String tempString = search.getText().toString();
-				// Check for empty search string display error dialog if it is
-				// empty.
-
-				if (!tempString.equals("")) {
-					search_string = tempString.replaceAll(" ", "%20");
-					// Pass search string to movieSearch method
-					movieSearch(search_string);
-					// close keyboard when Search is clicked
-					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(((View) v).getWindowToken(), 0);
-
-					search.setText("");
-					search.setHint(R.string.filter_hint);
-				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							mContext);
-					builder.setMessage(
-							"You did not enter a valid search keyword. Please enter a movie title or keyword that may be in the movie you are looking for.")
-							.setCancelable(false)
-							.setPositiveButton("OK",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
-										}
-									});
-					AlertDialog alert = builder.create();
-					alert.show();
-				}// if statement closing bracket
-
-			}// onClick closing bracket
-
-		});// onClickListener closing bracket
-
-		// Filter button
-		filter_button = (Button) findViewById(R.id.filter_button);
-		// disable filter button
-		filter_button.setVisibility(View.GONE);
-		filter_button.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String filter_Valid = search.getText().toString();
-
-				Pattern stringPattern = Pattern.compile("^[0-9]{1,4}$");
-				Matcher matchString = stringPattern.matcher(filter_Valid);
-				// Check for empty keyword, if empty display dialog otherwise
-				// continue to check if keyword is valid
-				if (filter_Valid.equals("")) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							mContext);
-					builder.setMessage(
-							"Filter keyword is empty. Please enter a keyword and try again.")
-							.setCancelable(false)
-							.setPositiveButton("OK",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
-										}
-									});
-					AlertDialog alert = builder.create();
-					alert.show();
-
-					// check whether keyword meets criteria set via regex.
-
-				} else if (!matchString.matches()) {
-					// Display dialog box for invalid filter string only allows
-					// ^[0-9]{1,4}$
-					// number 0-9 and only 4 character, all characters must be
-					// numbers
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							mContext);
-					builder.setMessage(
-							"Filter keyword may only contain numbers 0-9 and only 4 characters. Please try entering a valid keyword.")
-							.setCancelable(false)
-							.setPositiveButton("OK",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
-										}
-									});
-					AlertDialog alert = builder.create();
-					alert.show();
-
-				} else {
-					Uri yearUri = Uri
-							.parse(MovieContentProvider.MovieData.CONTENT_URI
-									.toString()
-									+ "/year/"
-									+ search.getText().toString());
-					Log.i("YEAR URI", yearUri.toString());
-					displayMovies(yearUri);
-					refresh_button.setVisibility(View.VISIBLE);
-					filter_button.setVisibility(View.GONE);
-				}
-			}
-		});// filter button on clickListener closing bracket
-
-		refresh_button = (Button) findViewById(R.id.refresh_previous);
-		refresh_button.setVisibility(View.GONE);
-		refresh_button.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Uri previousSearch = Uri
-						.parse(MovieContentProvider.MovieData.CONTENT_URI
-								.toString());
-				displayMovies(previousSearch);
-				refresh_button.setVisibility(View.GONE);
-				filter_button.setVisibility(View.VISIBLE);
-				search.setText("");
-				search.setHint(R.string.filter_hint);
-			}
-		});// refresh button closing bracket
 
 		movie_list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -299,18 +174,6 @@ public class MainActivity extends Activity {
 		}// handlerMessage closing bracket
 	};// Handler closing bracket
 
-	// Movie search method
-	private void movieSearch(String search_string) {
-
-		Log.i("SEARCH:", search_string);
-
-		Messenger messenger = new Messenger(movieHandler);
-		Intent intent = new Intent(mContext, MovieService.class);
-		intent.putExtra("search_string", search_string);
-		intent.putExtra("messenger", messenger);
-		startService(intent);
-	}// movieSearch Closing bracket
-
 	public void displayMovies(Uri uri) {
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 		if (cursor == null) {
@@ -352,6 +215,117 @@ public class MainActivity extends Activity {
 		cursor.close();
 	}// displayMovies method closing bracket
 
+
+	@Override
+	public void findMovies(String string) {
+		String tempString = string;
+		// Check for empty search string display error dialog if it is
+		// empty.
+
+		if (!tempString.equals("")) {
+			search_string = tempString.replaceAll(" ", "%20");
+			// Pass search string to movieSearch method
+			movieSearch(search_string);
+			// close keyboard when Search is clicked
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+
+			search.setText("");
+			search.setHint(R.string.filter_hint);
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setMessage(
+					"You did not enter a valid search keyword. Please enter a movie title or keyword that may be in the movie you are looking for.")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}// if statement closing bracket
+
+	}// movieSearch Closing bracket
+	
+	//
+	//
+	//
+	// May need to add override
+	public void movieSearch(String string) {
+
+		Log.i("SEARCH:", search_string);
+
+		Messenger messenger = new Messenger(movieHandler);
+		Intent intent = new Intent(mContext, MovieService.class);
+		intent.putExtra("search_string", search_string);
+		intent.putExtra("messenger", messenger);
+		startService(intent);
+	}// movieSearch Closing bracket
+
+	
+
+	//FILTER MOVIE MOVIELISTENER
+	@Override
+	public void filterMovies() {
+		// TODO Auto-generated method stub
+		String filter_Valid = search.getText().toString();
+
+		Pattern stringPattern = Pattern.compile("^[0-9]{1,4}$");
+		Matcher matchString = stringPattern.matcher(filter_Valid);
+		// Check for empty keyword, if empty display dialog otherwise
+		// continue to check if keyword is valid
+		if (filter_Valid.equals("")) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setMessage(
+					"Filter keyword is empty. Please enter a keyword and try again.")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
+
+			// check whether keyword meets criteria set via regex.
+
+		} else if (!matchString.matches()) {
+			// Display dialog box for invalid filter string only allows
+			// ^[0-9]{1,4}$
+			// number 0-9 and only 4 character, all characters must be
+			// numbers
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setMessage(
+					"Filter keyword may only contain numbers 0-9 and only 4 characters. Please try entering a valid keyword.")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
+
+		} else {
+			Uri yearUri = Uri.parse(MovieContentProvider.MovieData.CONTENT_URI
+					.toString() + "/year/" + search.getText().toString());
+			Log.i("YEAR URI", yearUri.toString());
+			displayMovies(yearUri);
+			Button refresh_button = (Button) findViewById(R.id.refresh_previous);
+			refresh_button.setVisibility(View.VISIBLE);
+			filter_button.setVisibility(View.GONE);
+		}
+
+	}
+
+	//ON ACTIVITY RESULT
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
 		if (resultCode == RESULT_OK && intent != null) {
@@ -363,8 +337,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	// Run network status method from WebData class in Network jar file
-	// Check Network Status
+	//CHECK NETWORK STATUS
 	public void checkConnection() {
 
 		connected = WebData.getStatus(mContext);
@@ -386,9 +359,14 @@ public class MainActivity extends Activity {
 							});
 			AlertDialog alert = builder.create();
 			alert.show();
+			Button search_button = (Button) findViewById(R.id.search_button);
 			search_button.setEnabled(false);
 
 		}// network connection if statement closing bracket
 	}
+
+
+
+
 
 }// MainActivity closing bracket
