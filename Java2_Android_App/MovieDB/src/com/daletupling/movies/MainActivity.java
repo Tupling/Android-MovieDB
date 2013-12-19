@@ -55,7 +55,7 @@ import android.widget.TextView;
 
 @SuppressLint("HandlerLeak")
 public class MainActivity extends Activity implements
-		MainFragment.MovieListener {
+		MainFragment.MovieListener, DetailsFragment.DetailsListener {
 
 	public static Context mContext;
 	// Layout elements
@@ -251,10 +251,7 @@ public class MainActivity extends Activity implements
 
 	}// movieSearch Closing bracket
 	
-	//
-	//
-	//
-	// May need to add override
+	//MOVIE SEARCH
 	public void movieSearch(String string) {
 
 		Log.i("SEARCH:", search_string);

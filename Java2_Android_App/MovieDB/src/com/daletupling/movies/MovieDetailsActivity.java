@@ -25,18 +25,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("NewApi")
-public class MovieDetailsActivity extends Activity {
+public class MovieDetailsActivity extends Activity implements
+		DetailsFragment.DetailsListener {
 
 	Context mContext;
 	TextView movie_title;
@@ -51,7 +50,7 @@ public class MovieDetailsActivity extends Activity {
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.details_layout);
+		setContentView(R.layout.details_frag);
 		// Setup Action Bar
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -81,25 +80,6 @@ public class MovieDetailsActivity extends Activity {
 		setTitle(movieTitle);
 		vote_count.setText("Votes: " + voteCount);
 		vote_avg.setText("Vote Average: " + voteAvg);
-
-		webView.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				String tempGoogleString = movie_title.getText().toString();
-
-				if (tempGoogleString != "") {
-					String googleSearch = tempGoogleString.replaceAll(" ",
-							"%20");
-					Intent implicitIntent = new Intent(Intent.ACTION_VIEW, Uri
-							.parse("https://www.google.com/search?q="
-									+ googleSearch));
-					startActivity(implicitIntent);
-				}
-
-			}
-
-		});
 
 		String baseURL = "https://d3gtl9l2a4fn1j.cloudfront.net/t/p/w342"
 				+ posterPath;
@@ -188,6 +168,8 @@ public class MovieDetailsActivity extends Activity {
 		finish();
 		return true;
 	}
+
+
 
 }// MovieDetailsClass closing bracket
 
