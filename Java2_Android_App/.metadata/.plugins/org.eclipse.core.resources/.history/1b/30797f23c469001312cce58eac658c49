@@ -102,9 +102,7 @@ public class MainActivityFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				m_listener.filterMovies(search.getText().toString());
-				refresh_button.setVisibility(View.VISIBLE);
-				filter_button.setVisibility(View.GONE);
+				m_listener.filterMovies();
 			}
 		});// FILTER BUTTON on clickListener closing bracket
 
