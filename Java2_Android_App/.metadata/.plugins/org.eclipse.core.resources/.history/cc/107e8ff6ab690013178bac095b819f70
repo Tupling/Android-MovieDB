@@ -48,6 +48,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 //Handler Leak suppress for movieHandler
 
@@ -59,6 +60,7 @@ public class MainActivity extends Activity implements
 	public static Context mContext;
 	// Layout elements
 	EditText search;
+	Button filter_button;
 	ListView movie_list;
 
 	SimpleAdapter listA;

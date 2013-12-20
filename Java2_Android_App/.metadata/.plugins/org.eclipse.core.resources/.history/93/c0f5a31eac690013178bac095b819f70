@@ -37,7 +37,6 @@ public class MovieDetailsActivity extends Activity implements
 		}
 		setContentView(R.layout.details_frag);
 
-		//Display movies for Activity in Portrait
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null) {
 

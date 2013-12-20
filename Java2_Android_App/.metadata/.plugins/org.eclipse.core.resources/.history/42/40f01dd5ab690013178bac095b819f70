@@ -48,6 +48,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 //Handler Leak suppress for movieHandler
 
@@ -59,7 +60,10 @@ public class MainActivity extends Activity implements
 	public static Context mContext;
 	// Layout elements
 	EditText search;
+	Button filter_button;
 	ListView movie_list;
+	TextView previous_text;
+	TextView previous_movie;
 
 	SimpleAdapter listA;
 
@@ -103,8 +107,6 @@ public class MainActivity extends Activity implements
 
 	}// onCreate closing bracket
 
-	
-	//THE MOVIE HANDLER
 	private Handler movieHandler = new Handler() {
 		public void handleMessage(Message message) {
 			Object dataObj = message.obj;
@@ -152,7 +154,6 @@ public class MainActivity extends Activity implements
 		}// handlerMessage closing bracket
 	};// Handler closing bracket
 
-	//DISPLAY MOVIES
 	public void displayMovies(Uri uri) {
 
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -226,7 +227,6 @@ public class MainActivity extends Activity implements
 
 	}// movieSearch Closing bracket
 
-	//MOVIE SELECTED METHOD CALLED IF ORIENTATION IS NOT LANDSCAPE
 	public void movieSelected(Intent intent, int position) {
 		@SuppressWarnings("unchecked")
 		HashMap<String, String> passedMap = (HashMap<String, String>) movie_list
@@ -318,7 +318,16 @@ public class MainActivity extends Activity implements
 	}
 
 	// ON ACTIVITY RESULT
-	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+		if (resultCode == RESULT_OK && intent != null) {
+			String previousMovie = intent.getExtras().getString("previous");
+			previous_movie.setVisibility(View.VISIBLE);
+			previous_text.setVisibility(View.VISIBLE);
+			previous_movie.setText(previousMovie);
+		}
+
+	}
 
 	// CHECK NETWORK STATUS	//CHECK CONNECTION METHOD CALLED IN ONCREATE
 	public void checkConnection() {

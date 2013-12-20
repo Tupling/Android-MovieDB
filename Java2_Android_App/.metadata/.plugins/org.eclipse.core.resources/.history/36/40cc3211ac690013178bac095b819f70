@@ -25,7 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 @SuppressLint("NewApi")
 public class MainActivityFragment extends Fragment {
-	//Layout Elements
+
 	EditText search;
 	Button filter_button, search_button, refresh_button;
 	ListView movie_list;

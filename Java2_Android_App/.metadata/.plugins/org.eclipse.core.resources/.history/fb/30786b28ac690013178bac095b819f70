@@ -32,7 +32,7 @@ import android.widget.TextView;
 
 @SuppressLint("NewApi")
 public class MovieDetailsActivityFragment extends Fragment {
-	//Layout Element Variables
+
 	TextView movie_title;
 	TextView movie_release;
 	static ImageView poster;
@@ -73,13 +73,10 @@ public class MovieDetailsActivityFragment extends Fragment {
 		vote_avg = (TextView) view.findViewById(R.id.vote_avg);
 		poster = (ImageView) view.findViewById(R.id.poster);
 		return_button = (Button) view.findViewById(R.id.return_button);
-		
-		//REMOVE RETURN BUTTON IF IN LANDSCAPE
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			return_button.setVisibility(View.GONE);
 		}
 
-		//RETURN BUTTON ON CLICK
 		return_button.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -93,7 +90,6 @@ public class MovieDetailsActivityFragment extends Fragment {
 		return view;
 	}
 
-	//MOVIE RESULTS
 	public void movieResults(Intent intent) {
 		Bundle bundle = intent.getExtras();
 		if (bundle != null) {

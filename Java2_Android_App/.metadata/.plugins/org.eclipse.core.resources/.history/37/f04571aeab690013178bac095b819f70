@@ -48,6 +48,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 //Handler Leak suppress for movieHandler
 
@@ -59,7 +60,10 @@ public class MainActivity extends Activity implements
 	public static Context mContext;
 	// Layout elements
 	EditText search;
+	Button filter_button;
 	ListView movie_list;
+	TextView previous_text;
+	TextView previous_movie;
 
 	SimpleAdapter listA;
 
@@ -82,8 +86,6 @@ public class MainActivity extends Activity implements
 
 		// Check Network Status
 		checkConnection();
-		
-		//SavedInstance Data Retention
 		if (savedInstanceState != null) {
 			movieListMap = (ArrayList<Map<String, String>>) savedInstanceState
 					.getSerializable("list_saved");
@@ -103,8 +105,6 @@ public class MainActivity extends Activity implements
 
 	}// onCreate closing bracket
 
-	
-	//THE MOVIE HANDLER
 	private Handler movieHandler = new Handler() {
 		public void handleMessage(Message message) {
 			Object dataObj = message.obj;
@@ -152,7 +152,6 @@ public class MainActivity extends Activity implements
 		}// handlerMessage closing bracket
 	};// Handler closing bracket
 
-	//DISPLAY MOVIES
 	public void displayMovies(Uri uri) {
 
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -226,7 +225,6 @@ public class MainActivity extends Activity implements
 
 	}// movieSearch Closing bracket
 
-	//MOVIE SELECTED METHOD CALLED IF ORIENTATION IS NOT LANDSCAPE
 	public void movieSelected(Intent intent, int position) {
 		@SuppressWarnings("unchecked")
 		HashMap<String, String> passedMap = (HashMap<String, String>) movie_list
@@ -318,9 +316,18 @@ public class MainActivity extends Activity implements
 	}
 
 	// ON ACTIVITY RESULT
-	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-	// CHECK NETWORK STATUS	//CHECK CONNECTION METHOD CALLED IN ONCREATE
+		if (resultCode == RESULT_OK && intent != null) {
+			String previousMovie = intent.getExtras().getString("previous");
+			previous_movie.setVisibility(View.VISIBLE);
+			previous_text.setVisibility(View.VISIBLE);
+			previous_movie.setText(previousMovie);
+		}
+
+	}
+
+	// CHECK NETWORK STATUS
 	public void checkConnection() {
 
 		connected = WebData.getStatus(mContext);
@@ -348,14 +355,12 @@ public class MainActivity extends Activity implements
 		}// network connection if statement closing bracket
 	}
 
-	//CLOSE KEYBOARD METHOD
 	public void closeKeyboard() {
 		// close keyboard when Search is clicked
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
 	}
 
-	//CALLED FROM FRAGMENT LISTVIEW CLICK LISTENER
 	@SuppressLint("NewApi")
 	@Override
 	public void landMovieSelected(Intent intent, int position) {
@@ -374,20 +379,18 @@ public class MainActivity extends Activity implements
 		}
 	}
 
-	//UNUSED AT THE MOMENT IN THIS ACTIVITY
 	@Override
 	public void returnPrevious() {
 		// TODO Auto-generated method stub
 
 	}
-	//UNUSED AT THE MOMENT IN THIS ACTIVITY
+
 	@Override
 	public void movieSelected(int position) {
 		// TODO Auto-generated method stub
 
 	}
 
-	//SAVED INSTANCE METHOD
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);

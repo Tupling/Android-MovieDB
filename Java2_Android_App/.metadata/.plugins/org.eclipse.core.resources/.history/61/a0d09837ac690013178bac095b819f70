@@ -93,7 +93,6 @@ public class MovieDetailsActivityFragment extends Fragment {
 		return view;
 	}
 
-	//MOVIE RESULTS
 	public void movieResults(Intent intent) {
 		Bundle bundle = intent.getExtras();
 		if (bundle != null) {

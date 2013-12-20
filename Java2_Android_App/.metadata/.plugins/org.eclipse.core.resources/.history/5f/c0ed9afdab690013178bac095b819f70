@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements
 
 	public static Context mContext;
 	// Layout elements
-	EditText search;
+
 	ListView movie_list;
 
 	SimpleAdapter listA;
