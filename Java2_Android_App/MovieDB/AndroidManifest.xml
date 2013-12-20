@@ -19,7 +19,7 @@
             android:name="com.daletupling.movies.MainActivity"
             android:label="@string/app_name" 
           
-            android:configChanges="orientation|screenSize">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

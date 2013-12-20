@@ -1,12 +1,14 @@
 package com.daletupling.movies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +46,8 @@ public class MainActivityFragment extends Fragment {
 		public void movieSelected(int position);
 
 		public void closeKeyboard();
-		
-		public void landMovieSelected(int position);
+
+		public void landMovieSelected(Intent intent, int position);
 	}
 
 	public void onAttach(Activity activity) {
@@ -59,6 +61,7 @@ public class MainActivityFragment extends Fragment {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -124,23 +127,32 @@ public class MainActivityFragment extends Fragment {
 		search = (EditText) view.findViewById(R.id.search_input);
 		movie_list = (ListView) view.findViewById(R.id.movie_list);
 		movieListMap = new ArrayList<Map<String, String>>();
-		if (movieListMap != null) {
-			listA = new SimpleAdapter(getActivity(), movieListMap,
-					R.layout.list_layout, new String[] { "title", "release" },
-					new int[] { R.id.title_text, R.id.release_text });
-			// Set ListAdapter to previous created listA
-			// movie_list.setAdapter(listA);
-		}
+		
 		movie_list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				m_listener.landMovieSelected(position);
+				HashMap<String, String> passedMap = (HashMap<String, String>) movie_list
+						.getItemAtPosition(position);
+
+				Intent i = new Intent(getActivity(), MovieDetailsActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putString("selectedMovie", passedMap.get("title"));
+				bundle.putString("selectedRelease", passedMap.get("release"));
+				bundle.putString("posterPath", passedMap.get("poster"));
+				bundle.putString("voteCount", passedMap.get("votes"));
+				bundle.putString("voteAvg", passedMap.get("vote_avg"));
+				i.putExtras(bundle);
+				startActivityForResult(i, position);
+				m_listener.landMovieSelected(i, position);
 			}
 
 		});// movie list on click listener closing bracket
 		return view;
 	};
+	
+	
+	
 
 }

@@ -1,0 +1,73 @@
+/*
+ * Project:        MoviesDB
+ * 
+ * Package: com.daletupling.movies
+ * 
+ * Author:         Dale Tupling
+ * 
+ * Date:        December 10th, 2013
+ * 
+ */
+
+package com.daletupling.movies;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+
+import java.net.URL;
+import java.net.URLConnection;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.ImageView;
+
+@SuppressLint("NewApi")
+public class MovieDetailsActivity extends Activity implements
+		MovieDetailsActivityFragment.DetailsListener {
+
+	Context mContext;
+
+	public static ImageView poster;
+	public static Bitmap bmp;
+	public static GetImage getPoster;
+	static MovieDetailsActivityFragment frag;
+
+	@SuppressLint("NewApi")
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			finish();
+			return;
+		}
+		setContentView(R.layout.details_frag);
+
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null) {
+
+			Intent i = new Intent(getApplicationContext(),
+					MovieDetailsActivity.class);
+			frag = (MovieDetailsActivityFragment) getFragmentManager()
+					.findFragmentById(R.id.details_fragment);
+			i.putExtras(bundle);
+			frag.movieResults(i);
+			String movieTitle = bundle.getString("selectedMovie");
+			setTitle(movieTitle);
+
+		}
+
+	}// onCreate closing bracket
+
+	
+
+}// MovieDetailsClass closing bracket
+

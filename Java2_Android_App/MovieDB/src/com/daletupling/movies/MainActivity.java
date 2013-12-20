@@ -10,6 +10,7 @@
  */
 package com.daletupling.movies;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,8 @@ import android.widget.TextView;
 
 @SuppressLint("HandlerLeak")
 public class MainActivity extends Activity implements
-		MainActivityFragment.MovieListener, MovieDetailsActivityFragment.DetailsListener{
+		MainActivityFragment.MovieListener,
+		MovieDetailsActivityFragment.DetailsListener {
 
 	public static Context mContext;
 	// Layout elements
@@ -71,18 +73,35 @@ public class MainActivity extends Activity implements
 
 	List<Map<String, String>> movieListMap;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_frag);
 		mContext = this;
-		//ArrayList Instantiation
+		// ArrayList Instantiation
 		movieListMap = new ArrayList<Map<String, String>>();
-		//ListView instantiation
+		// ListView instantiation
 		movie_list = (ListView) findViewById(R.id.movie_list);
 
 		// Check Network Status
 		checkConnection();
+		if (savedInstanceState != null) {
+			movieListMap = (ArrayList<Map<String, String>>) savedInstanceState
+					.getSerializable("list_saved");
+			if (movieListMap != null) {
+				listA = new SimpleAdapter(this, movieListMap,
+						R.layout.list_layout,
+						new String[] { "title", "release" }, new int[] {
+								R.id.title_text, R.id.release_text });
+				// Set ListAdapter to previous created listA
+				movie_list.setAdapter(listA);
+			} else {
+				Log.d("MAIN", "Saved=null");
+			}
+		} else {
+			Log.d("MAIN", "no Saved Instance");
+		}
 
 	}// onCreate closing bracket
 
@@ -206,19 +225,20 @@ public class MainActivity extends Activity implements
 
 	}// movieSearch Closing bracket
 
-	public void movieSelected(int position) {
+	public void movieSelected(Intent intent, int position) {
 		@SuppressWarnings("unchecked")
 		HashMap<String, String> passedMap = (HashMap<String, String>) movie_list
 				.getItemAtPosition(position);
 
 		Intent i = new Intent(getApplicationContext(),
 				MovieDetailsActivity.class);
-
-		i.putExtra("selectedMovie", passedMap.get("title"));
-		i.putExtra("selectedRelease", passedMap.get("release"));
-		i.putExtra("posterPath", passedMap.get("poster"));
-		i.putExtra("voteCount", passedMap.get("votes"));
-		i.putExtra("voteAvg", passedMap.get("vote_avg"));
+		Bundle bundle = new Bundle();
+		bundle.putString("selectedMovie", passedMap.get("title"));
+		bundle.putString("selectedRelease", passedMap.get("release"));
+		bundle.putString("posterPath", passedMap.get("poster"));
+		bundle.putString("voteCount", passedMap.get("votes"));
+		bundle.putString("voteAvg", passedMap.get("vote_avg"));
+		i.putExtras(bundle);
 		startActivityForResult(i, position);
 	}
 
@@ -343,31 +363,41 @@ public class MainActivity extends Activity implements
 
 	@SuppressLint("NewApi")
 	@Override
-	public void landMovieSelected(int position) {
+	public void landMovieSelected(Intent intent, int position) {
 		// TODO Auto-generated method stub
-		
-		MovieDetailsActivityFragment frag = (MovieDetailsActivityFragment) getFragmentManager().findFragmentById(R.id.details_fragment);
-		if(frag != null && frag.isInLayout()){
-			frag.movieResults();
+
+		MovieDetailsActivityFragment frag = (MovieDetailsActivityFragment) getFragmentManager()
+				.findFragmentById(R.id.details_fragment);
+		if (frag != null && frag.isInLayout()) {
+
+			frag.movieResults(intent);
 			Log.i("FRAG IN LAYOUT", "FRAGMENT IS IN LAYOUT");
-		}else{
+		} else {
+
 			movieSelected(position);
 			Log.i("FRAG IN LAYOUT", "FRAGMENT IS NOT IN LAYOUT");
 		}
 	}
 
 	@Override
-	public void moviePoster(String posterString) {
+	public void returnPrevious() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void returnPrevious() {
+	public void movieSelected(int position) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (movieListMap != null && !movieListMap.isEmpty()) {
+			outState.putSerializable("list_saved", (Serializable) movieListMap);
+			Log.i("MAIN", "Saving instance state data");
+		}
+	}
 
 }// MainActivity closing bracket
