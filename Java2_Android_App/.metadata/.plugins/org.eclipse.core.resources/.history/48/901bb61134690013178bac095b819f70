@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="com.daletupling.movies.MainActivityFragment"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="2" >
+    </fragment>
+
+    <fragment 
+        android:id="@+id/details_fragment"
+        android:name="com.daletupling.movies.MovieDetailsActivityFragment"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </fragment>
+
+</LinearLayout>

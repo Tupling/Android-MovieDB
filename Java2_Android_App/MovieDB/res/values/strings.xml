@@ -16,5 +16,6 @@
     <string name="vote_title">Votes:</string>
     <string name="previous">Previously Viewed:</string>
     <string name="search_google">Search Google</string>
+    <string name="return_btn_text">Return</string>
 
 </resources>

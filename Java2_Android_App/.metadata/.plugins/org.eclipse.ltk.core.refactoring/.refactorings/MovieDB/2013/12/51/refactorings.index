@@ -1,3 +1,3 @@
-1387272037927	Delete element
-1387326300343	Delete element
-1387486806537	Delete element
+1387506783070	Rename type 'MainFragment'
+1387506804345	Rename type 'DetailsFragment'
+1387511214391	Extracts string 'Return' into R.string.return_btn_text
